@@ -1,0 +1,33 @@
+.header {
+    width: 100%;
+    min-height: 86px;
+}
+
+.header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: row;
+
+}
+
+.logo-container .logo {
+
+}
+
+.logo-container .separator {
+    width: 2px;
+    height: 100%;
+    background: var(--Gray-100, #EFEFEF);
+
+}
+
+.user-container {
+
+}
