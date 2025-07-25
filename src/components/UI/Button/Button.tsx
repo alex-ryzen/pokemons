@@ -4,15 +4,15 @@ import styles from './button.module.css'
 interface ButtonProps {
     text: string;
     onClick: () => void;
-    href?: string;
+    link?: string;
     style?: CSSProperties;
 }
 
-const Button = ({text, onClick, href, style}: ButtonProps) => {
+const Button = ({text, onClick, link, style}: ButtonProps) => {
     return (
-        href 
+        link 
         ? 
-            <a className="linkButton" href={href} style={style}>
+            <a className="linkButton" href={link} style={style}>
                 {text}
             </a> 
         : 

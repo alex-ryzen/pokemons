@@ -3,4 +3,7 @@
     padding: 16px;
     background-color: #ffffff;
     width: 100%;
+    display: grid;
+    grid-template-columns: 320px auto 320px;
+    grid-template-rows: 86px auto;
 }

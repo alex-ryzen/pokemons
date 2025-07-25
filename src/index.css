@@ -1,18 +1,19 @@
-@import url('../public/fonts/Roboto/stylesheet.css');
-@import url('../public/fonts/Inter/stylesheet.css');
+:root {
+  --primary-color: #FFCC01;
+  --secondary-color: #365FAC;
+  --dark-color: #000000;
+  --light-color: #ffffff;
+  font-family: Roboto, Inter, sans-serif;
+  color-scheme: light dark;
+  --background-color: #FFFFFF;
+  --gray-100: #EFEFEF;
+  --def-br: 16px;
+  --def-fz: 16px;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Inter', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 
 /* reset def browser styles */
@@ -109,4 +110,3 @@ legend {
 input[type='file'] {
 	max-width: 100%;
 }
-
