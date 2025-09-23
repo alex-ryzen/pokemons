@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode, useState } from 'react';
 import styles from './mainLayout.module.css'
 import { Outlet } from 'react-router';
 import Header from '../Header/Header';
@@ -18,9 +18,10 @@ const asideStyle: CSSProperties = {
 }
 
 const MainLayout = ({mainContent, siderLContent, siderRContent}: MainLayoutProps) => {
+    const [isDraggingInsideGrid, setIsDraggingInsideGrid] = useState<boolean>(true)
     return (
         <div className={styles.layout}> 
-            <DndContext>
+            <DndContext autoScroll={true}>
                 <Header/>
                 <main className={`${styles['content-layout']}`}>
                     <aside className={`${styles['content-aside']} content-block`} style={{order: 0}}>
