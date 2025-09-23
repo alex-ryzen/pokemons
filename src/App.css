@@ -1,10 +1,21 @@
+@import url('./index.css');
+
 /* global styles */
+
+body {
+  background: var(--background-color);
+  color: var(--dark-color);
+  font-family: 'Inter', sans-serif;
+}
+
+div#root {}
+
 .content-block {
-  background-color: #ffffff;
+  background-color: var(--background-color);
   box-shadow: 0px 0px 16px 0px #3A3A3A1A;
   -webkit-box-shadow: 0px 0px 16px 0px #3A3A3A1A;
   -moz-box-shadow: 0px 0px 16px 0px #3A3A3A1A;
-  padding: 1em;
+  border-radius: 1rem;
 }
 
 /* #root {

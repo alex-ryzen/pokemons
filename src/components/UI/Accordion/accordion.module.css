@@ -1,0 +1,94 @@
+.accordion {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(.45,.9,.45,.99);
+  padding: 16px;
+}
+.accordion--open {
+  flex: 1 1 0;
+}
+
+.accordion-header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.accordion-header {
+  line-height: 100%;
+  background: transparent;
+  padding-bottom: 0px;
+  transition: padding-bottom 0.2s ease;
+}
+
+.accordion-arrow-icon {
+  display: block;
+  transition: all 0.3s cubic-bezier(.45,.9,.45,.99);
+}
+
+.accordion-arrow-icon--open{
+  transform: rotateX(180deg);
+}
+
+.accordion-content-wrapper {
+  position: relative;
+  height: 0;
+  transition: all 0.25s cubic-bezier(.25,1,.7,1);
+}
+
+.accordion-content-wrapper--open {
+  height: auto;
+}
+
+.accordion-content-wrapper--open::before {
+  content: '';
+  position: absolute;
+  z-index: 101;
+  top: 6px;
+  left: -1rem;
+  width: calc(100% + 2rem);
+  height: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255, 0) 100%);
+}
+
+.accordion-content-wrapper--open::after {
+  content: '';
+  position: absolute;
+  z-index: 101;
+  bottom: -2px;
+  left: -1rem;
+  width: calc(100% + 2rem);
+  height: 16px;
+  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255, 0) 100%);
+}
+
+.accordion-content {
+  position: relative;
+  padding: 8px 0;
+  overflow: hidden;
+  height: 0;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(.25,1,.7,1);
+}
+
+.accordion-content--open {
+  max-height: 56vh;
+  margin-top: 8px;
+  overflow: auto;
+  height: 100%;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.accordion-content::-webkit-scrollbar-thumb {
+  z-index: 999;
+}
+
+.accordion-inner {
+  background: transparent;
+}

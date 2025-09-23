@@ -1,0 +1,8 @@
+.item-grid-container {
+    display: inline-block;
+    position: relative;
+}
+
+.item-grid {
+    display: grid;
+}

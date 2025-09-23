@@ -9,7 +9,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    data: null,
+    data: {id: '111', username: 'prinet_pb', role: UserRoles.User, isAuth: true}, //null
     status: 'idle',
     error: null,
 }

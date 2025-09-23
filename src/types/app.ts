@@ -14,15 +14,22 @@ export interface IUser {
   isAuth: boolean,
 };
 
+/**
+ * Item
+ */
 export type Item = {
   id: string;
-  cellWidth: number;  
-  cellHeight: number; 
-  x: number;      
+  x: number;
   y: number;
-  name: string;
+  width: number;
+  height: number;
+  targetX?: number;
+  targetY?: number;
+  color?: string;
+  img?: string;
 };
 
-export type Cell = {
-  itemId?: string;
-};
+export type DropArea = {
+  startPos: {x: number, y: number},
+  endPos: {x: number, y: number}
+}  

@@ -1,0 +1,18 @@
+
+.logo-container {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    height: 100%;
+}
+
+.logo {
+    display: block;
+    max-height: 100%;
+}
+
+.separator {
+    width: 2px;
+    height: 100%;
+    background: var(--gray-100);
+}

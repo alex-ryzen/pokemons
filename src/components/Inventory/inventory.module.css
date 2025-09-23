@@ -1,8 +1,13 @@
-
 .inventory-wrapper {
-    
+    display: block;
+    position: relative;
 }
 
 .inventory {
+    display: flex;
+    flex-direction: column;
+}
 
+.item-grid-wrapper {
+    padding: 0px 16px 16px 16px;
 }

@@ -1,9 +1,6 @@
-
-import pokemonsLogo from '../../../../public/images/logo/pokemons_logo.png'
-import clickerLogo from '../../../../public/images/logo/clicker_logo.png'
-import coinIcon from '../../../../public/images/icon/pokecoin.png'
 import styles from './header.module.css'
 import BlockTitle from '../BlockTitle/BlockTitle'
+import Logo from '../LogoContainer/Logo';
 
 
 interface HeaderProps {
@@ -17,19 +14,14 @@ const Header = (headerProps: HeaderProps) => {
     };
     
     return ( 
-        <header className="header" id="header">
+        <header className={`${styles['header']} content-block`} id="header">
             <div className={styles['header-container']}>
-                <div className={styles['logo-container']}>
-                    {/* use as a Link */}
-                    <img src={pokemonsLogo} alt="Pokemon" className={styles.logo} />
-                    <hr className={styles.separator}></hr>
-                    <img src={clickerLogo} alt="Clicker" className={styles.logo}/>
-                </div>
+                <Logo/>
                 <div className={styles['user-container']}>
                     <div className={styles['user-profile']}></div>
                     <div className={styles['balance-container']}>
-                        <img src={coinIcon} alt="" className={styles['balance-coin-icon']}/>
-                        <BlockTitle text={formatBalance(100000000)}/>
+                        <img src={'./images/icon/pokecoin.png'} alt="" className={styles['balance-coin-icon']}/>
+                        <BlockTitle>{formatBalance(100000000)}</BlockTitle>
                     </div>
                 </div>
             </div>

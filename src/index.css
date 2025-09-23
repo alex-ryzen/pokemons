@@ -1,3 +1,6 @@
+@import url('/fonts/Inter/stylesheet.css');
+@import url('/fonts/Roboto/stylesheet.css');
+
 :root {
   --primary-color: #FFCC01;
   --secondary-color: #365FAC;
@@ -7,13 +10,22 @@
   color-scheme: light dark;
   --background-color: #FFFFFF;
   --gray-100: #EFEFEF;
+  --gray-30: rgba(239, 239, 239, 0.3);
   --def-br: 16px;
   --def-fz: 16px;
+  --text-color-op85: rgba(0, 0, 0, 0.85);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --secondary-hover: #254580;
+  --secondary-active: #3f77c5;
+
+  --secondary-danger: rgba(250, 177, 160);
+  --secondary-danger-op80: rgba(250, 177, 160, 0.8);
+  --secondary-active-op50: rgba(63, 119, 197, 0.5);
 }
 
 /* reset def browser styles */
@@ -109,4 +121,21 @@ legend {
 
 input[type='file'] {
 	max-width: 100%;
+}
+
+/* 2-powered paddings */
+.p-4 {
+    padding: 4px;
+}
+.p-8 {
+    padding: 8px;
+}
+.p-16 {
+    padding: 16px;
+}
+.p-32 {
+    padding: 32px;
+}
+.p-64 {
+    padding: 64px;
 }

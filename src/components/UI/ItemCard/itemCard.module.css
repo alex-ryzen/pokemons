@@ -1,0 +1,46 @@
+.item-card {
+    padding: 12px;
+}
+
+.item-card-container {
+
+}
+
+.item-card-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.content-img-container {
+    overflow: hidden;
+    background-color: var(--gray-100);
+    border-radius: 4px;
+}
+
+.content-img {
+
+}
+
+.description-content {
+    color: var(--dark-color);
+}
+
+.title {
+    display: inline-block;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0;
+    margin-bottom: 6px;
+}
+
+.description {
+    display: inline-block;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0;
+}

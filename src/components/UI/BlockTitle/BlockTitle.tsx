@@ -3,14 +3,16 @@ import styles from './blockTitle.module.css'
 
 
 interface BlockTitleProps {
-    text: string;
+    children: string;
+    onClick?: () => void;
+    extClassName?: string;
     style?: CSSProperties;
 }
 
-const BlockTitle = ({style, text=""}: BlockTitleProps) => {
+const BlockTitle = ({style, onClick, extClassName, children=""}: BlockTitleProps) => {
     return ( 
-        <h2 className={styles.btitle} style={style}>
-            {text}
+        <h2 className={`${styles.btitle} ${extClassName}`} style={style} onClick={onClick}>
+            {children}
         </h2>
     );
 }

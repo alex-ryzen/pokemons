@@ -1,22 +1,30 @@
 import { CSSProperties } from "react";
 import styles from './button.module.css'
+import { Link } from "react-router";
 
 interface ButtonProps {
-    text: string;
+    children: string;
     onClick: () => void;
     link?: string;
+    internalLink?: boolean;
     style?: CSSProperties;
 }
 
-const Button = ({text, onClick, link, style}: ButtonProps) => {
+const Button = ({children: text, onClick, link, style, internalLink = true}: ButtonProps) => {
     return (
         link 
-        ? 
-            <a className="linkButton" href={link} style={style}>
-                {text}
-            </a> 
+        ?
+            internalLink
+            ?
+                <Link className={styles.linkButton} to={link} style={style}>
+                    {text}
+                </Link>
+            :
+                <a className={styles.urlButton} href={link} style={style}>
+                    {text}
+                </a> 
         : 
-            <button className="button" style={style} onClick={onClick}>
+            <button className={styles.button} style={style} onClick={onClick}>
                 {text}
             </button>
     );
