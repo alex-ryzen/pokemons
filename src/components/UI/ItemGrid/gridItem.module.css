@@ -1,11 +1,11 @@
-.grid-item {
+.grid-item { 
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: normal;
     z-index: 1;
-    background: #EFEFEF;
     opacity: 1;
+    background: #EFEFEF;
     border-radius: 4px;
     box-shadow: none; /*0 1px 6px #b2bec3*/
     transition: box-shadow 0.3s ease, opacity 0.3s ease;

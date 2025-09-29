@@ -1,6 +1,6 @@
+import type { Action, ThunkAction } from '@reduxjs/toolkit'
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './slices/userSlice'
-// ...
 
 export const store = configureStore({
     reducer: {
@@ -14,3 +14,10 @@ export type AppStore = typeof store
 export type RootState = ReturnType<AppStore['getState']>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = AppStore['dispatch']
+// Define a reusable type describing thunk functions
+export type AppThunk<ThunkReturnType = void> = ThunkAction<
+  ThunkReturnType,
+  RootState,
+  unknown,
+  Action
+>

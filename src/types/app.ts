@@ -17,19 +17,33 @@ export interface IUser {
 /**
  * Item
  */
-export type Item = {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  targetX?: number;
-  targetY?: number;
-  color?: string;
-  img?: string;
+
+export type CellSize = {
+    height: number;
+    width: number;
+}
+
+export type Coordinates = {
+    x: number;
+    y: number;
+}
+
+export type GridPosition = {
+    cPos: Coordinates;
+    cSize: CellSize;
+    cTarget?: Coordinates;
+    coords?: Coordinates;
+}
+
+export interface Item {
+    id: string;
+    gridSpec: GridPosition;
+    absPos?: Coordinates;
+    color?: string;
+    img?: string;
 };
 
 export type DropArea = {
-  startPos: {x: number, y: number},
-  endPos: {x: number, y: number}
+    startPos: Coordinates,
+    endPos: Coordinates
 }  

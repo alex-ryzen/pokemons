@@ -1,8 +1,9 @@
+import { createRef, useEffect, useRef } from "react";
 import Button from "../Button/Button";
 import styles from './itemCard.module.css'
 
 
-interface ItemCardProps {
+export interface ItemCardProps {
     title: string;
     description: string;
     img?: string; //| Base64URLString | Blob
@@ -11,6 +12,10 @@ interface ItemCardProps {
 
 const ItemCard = ({title, description, img, buttonTxt}: ItemCardProps) => {
     //const price: number | string = "TBA";
+    const btnRef = createRef<HTMLButtonElement>();
+    useEffect(() => {
+        if (btnRef.current) btnRef.current.className = `${btnRef.current.className} ${styles.itemCardBtn}`
+    }, [btnRef.current])
     return ( 
         <article className={`content-block ${styles.itemCard}`}>
             <div className={styles.itemCardContainer}>
@@ -23,7 +28,7 @@ const ItemCard = ({title, description, img, buttonTxt}: ItemCardProps) => {
                         <p className={styles.description}>{description}</p>
                     </div>
                 </div>
-                <Button onClick={() => console.log("BUTTON CLICKED!")}>{buttonTxt}</Button> 
+                <Button ref={btnRef} onClick={() => console.log("BUTTON CLICKED!")}>{buttonTxt}</Button> 
             </div>
         </article>
     );

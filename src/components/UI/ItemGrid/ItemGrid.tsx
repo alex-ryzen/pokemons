@@ -8,20 +8,23 @@ import {
 } from "../../../store/consts";
 import { type Item, type DropArea } from "../../../types/app";
 import {
+    defaultDropAnimationSideEffects,
     DndContext,
     DragEndEvent,
     DragMoveEvent,
     DragOverlay,
     DragStartEvent,
     useDndMonitor,
+    useDroppable,
 } from "@dnd-kit/core";
 import GridCell, { GridCellProps } from "./GridCell";
 import GridItem from "./GridItem";
 import { ItemGridFuncs as IGF } from "../../../utils/itemGrid";
 import styles from "./itemGrid.module.css";
-import VirtualGridWrapper, { ScrollOffset, VGParentRefType } from "./VirtualGridWrapper";
+import VirtualGridWrapper, { VGParentRefType } from "./VirtualGridWrapper";
 import { createPortal } from "react-dom";
 import { getRandomInt } from "../../../utils/random";
+import GridDraggableItem from "./GridDraggableItem";
 
 export interface ItemGridProps {
     prefix: string;
@@ -35,10 +38,11 @@ const ItemGrid: React.FC<ItemGridProps> = (props) => {
     const parentRef = useRef<VGParentRefType>(null);
     
     const dropAnimationDuration = 200; //ms
+    
     //const [scrollOffsets, setScrollOffsets] = useState<ScrollOffset>({ top: 0, left: 0 })
     // useEffect(() => {
-    //     console.log(JSON.stringify(dropArea));
-    // }, [dropArea]);
+    //     console.log('IS OVER!');
+    // }, []);
 
     useDndMonitor({
         onDragMove: handleDragMove,
@@ -54,8 +58,8 @@ const ItemGrid: React.FC<ItemGridProps> = (props) => {
 
     function handleDragEnd(e: DragEndEvent) {
         if (!draggedItem.current) {return;}
-        const targetX = draggedItem.current.targetX || 0;
-        const targetY = draggedItem.current.targetY || 0;
+        const targetX = draggedItem.current.gridSpec.cTarget?.x || 0;
+        const targetY = draggedItem.current.gridSpec.cTarget?.y || 0;
 
         if (IGF.canPlace(items, draggedItem.current)) {
             setItems(
@@ -76,19 +80,19 @@ const ItemGrid: React.FC<ItemGridProps> = (props) => {
         //console.log( "old scrolls: ", JSON.stringify(scrollOffsets),"\new scrolls: ", scrollOffsetLeft, scrollOffsetTop)
         if (currentDraggedItem) {
             const posX =
-                (CELL_SIZE + GRID_GAP) * currentDraggedItem.x +
+                (CELL_SIZE + GRID_GAP) * currentDraggedItem.gridSpec.cPos.x +
                 (e.delta?.x ?? 0); /** - (scrollOffsetLeft - (scrollOffsets?.left ?? 0)) */
             const posY =
-                (CELL_SIZE + GRID_GAP) * currentDraggedItem.y +
+                (CELL_SIZE + GRID_GAP) * currentDraggedItem.gridSpec.cPos.y +
                 (e.delta?.y ?? 0); /** - (scrollOffsetTop - (scrollOffsets?.top ?? 0)) */
             const targetCX = Math.round(posX / (CELL_SIZE + GRID_GAP));
             const targetCY = Math.round(posY / (CELL_SIZE + GRID_GAP));
 
             const newDropArea = IGF.getDropArea({
                 ...currentDraggedItem,
-                targetX: targetCX,
-                targetY: targetCY,
+                gridSpec: {...currentDraggedItem.gridSpec, cTarget: {x: targetCX, y: targetCY}}
             });
+            console.log(e.delta?.x, e.delta?.y)
             if (
                 newDropArea &&
                 (!dropArea ||
@@ -99,8 +103,10 @@ const ItemGrid: React.FC<ItemGridProps> = (props) => {
             ) {
                 setDropArea(newDropArea);
             }
-            currentDraggedItem.targetX = targetCX;
-            currentDraggedItem.targetY = targetCY;
+            if (currentDraggedItem.gridSpec.cTarget) {
+                currentDraggedItem.gridSpec.cTarget.x = targetCX;
+                currentDraggedItem.gridSpec.cTarget.y = targetCY;
+            }
         }
     }
     const getGridCellData = (
@@ -120,10 +126,10 @@ const ItemGrid: React.FC<ItemGridProps> = (props) => {
         if (item) {
             return {
                 position: "absolute",
-                left: item.x * (CELL_SIZE + GRID_GAP),
-                top: item.y * (CELL_SIZE + GRID_GAP),
-                width: item.width * (CELL_SIZE + GRID_GAP) - GRID_GAP ,
-                height: item.height * (CELL_SIZE + GRID_GAP) - GRID_GAP,
+                left: item.gridSpec.cPos.x * (CELL_SIZE + GRID_GAP),
+                top: item.gridSpec.cPos.y * (CELL_SIZE + GRID_GAP),
+                width: item.gridSpec.cSize.width * (CELL_SIZE + GRID_GAP) - GRID_GAP ,
+                height: item.gridSpec.cSize.height * (CELL_SIZE + GRID_GAP) - GRID_GAP,
                 background: item.color,
                 opacity: 1,
             }
@@ -163,7 +169,7 @@ const ItemGrid: React.FC<ItemGridProps> = (props) => {
                                     />
                                 );
                             })}
-                            {items.map((item) => 
+                            {items.map((item, idx) => 
                                 item.id !== draggedItem.current?.id && (
                                     <GridItem
                                         key={item.id}
@@ -176,10 +182,19 @@ const ItemGrid: React.FC<ItemGridProps> = (props) => {
                         </>
                     )}
                 </VirtualGridWrapper>
-                {createPortal(
+                 {createPortal(
                     <DragOverlay 
-                        dropAnimation={{duration: dropAnimationDuration}}
-                        style={{willChange: "transform"}}
+                        dropAnimation={{
+                            duration: dropAnimationDuration, 
+                            sideEffects: defaultDropAnimationSideEffects({
+                                styles: {
+                                    active: {
+                                        opacity: "1"
+                                    },
+                                }
+                            }),
+                        }}
+                        style={{willChange: "transform", cursor: "grabbing"}}
                     >
                         {draggedItem.current && 
                             <GridItem

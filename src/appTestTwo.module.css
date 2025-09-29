@@ -1,0 +1,10 @@
+.grid {
+    display: grid;
+}
+
+.cell {
+    background-color: rgb(195, 195, 195);
+    border-radius: 4px;
+    width: 48px;
+    height: 48px;
+}

@@ -1,0 +1,51 @@
+.select-bar-wrapper {
+    display: block;
+    padding: 0 12px;
+}
+
+.select-bar {
+    font-family: "Roboto", sans-serif;
+    width: 100%;
+    padding: 4px;
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
+}
+
+.select-bar-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.select-bar-option {
+    font-weight: 400;
+    background-color: var(--neutral-3);
+    border: 1px solid var(--neutral-4);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px 2px 8px;
+}
+
+.sbo-text {
+    font-size: 12px;
+    line-height: 20px;
+    color: #000000D9;
+}
+
+.sbo-close-btn {
+    min-height: 10px;
+    min-width: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sbo-close-btn-icon {
+    fill: none;
+}
+
+.sbo-close-btn-icon-path {
+    fill: #00000073;
+}

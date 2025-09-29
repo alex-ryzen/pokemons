@@ -1,6 +1,8 @@
-import { CSSProperties } from "react";
+import { CSSProperties, forwardRef, ReactNode, Ref } from "react";
 import styles from './button.module.css'
 import { Link } from "react-router";
+
+type ButtonRef = Ref<HTMLButtonElement> | Ref<HTMLAnchorElement> //Ref<ReturnType<typeof Link>>
 
 interface ButtonProps {
     children: string;
@@ -10,24 +12,24 @@ interface ButtonProps {
     style?: CSSProperties;
 }
 
-const Button = ({children: text, onClick, link, style, internalLink = true}: ButtonProps) => {
+const Button = forwardRef(({children: text, onClick, link, style, internalLink = true}: ButtonProps, ref: ButtonRef) => {
     return (
         link 
         ?
             internalLink
             ?
-                <Link className={styles.linkButton} to={link} style={style}>
+                <Link ref={ref as Ref<HTMLAnchorElement>} className={styles.linkButton} to={link} style={style}>
                     {text}
                 </Link>
             :
-                <a className={styles.urlButton} href={link} style={style}>
+                <a ref={ref as Ref<HTMLAnchorElement>} className={styles.urlButton} href={link} style={style}>
                     {text}
                 </a> 
         : 
-            <button className={styles.button} style={style} onClick={onClick}>
-                {text}
+            <button ref={ref as Ref<HTMLButtonElement>} className={styles.button} style={style} onClick={onClick}>
+                <span>{text}</span>
             </button>
     );
-}
+})
  
 export default Button;

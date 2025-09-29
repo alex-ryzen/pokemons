@@ -10,24 +10,28 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding-bottom: 12px;
 }
 
 .content-img-container {
     overflow: hidden;
     background-color: var(--gray-100);
     border-radius: 4px;
+    flex-shrink: 0;
 }
 
 .content-img {
-
+    width: 59px;
+    image-rendering: pixelated; /*PIXELATED PICTURE ONLY*/
 }
 
 .description-content {
     color: var(--dark-color);
+    width: calc(100% * 190 / (296 - 24));
 }
 
 .title {
-    display: inline-block;
+    display: block;
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -37,10 +41,18 @@
 }
 
 .description {
-    display: inline-block;
+    display: block;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 14px;
     line-height: 100%;
     letter-spacing: 0;
+}
+
+.item-card-btn {
+    width: 100%;
+}
+
+.item-card-btn > span {
+    left: 0;
 }

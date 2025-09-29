@@ -14,10 +14,16 @@
     color: var(--light-color);
     background: var(--secondary-color);
     font-family: 'Roboto', sans-serif;
-    font-weight: 400;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.button > span {
+    font-weight: 300;
     line-height: 22px;
     font-size: 14px;
     letter-spacing: 0;
+    padding: 4px 0;
 }
 
 .button:hover {

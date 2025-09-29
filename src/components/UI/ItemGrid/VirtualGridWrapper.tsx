@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle, RefObject } from "react";
 import { CELL_SIZE, GRID_GAP, GRID_HEIGHT } from "../../../store/consts";
 
+//export type G = ReturnType<typeof GRID_GAP>
 
 export type ScrollOffset = { top: number; left: number }
 
@@ -10,12 +11,12 @@ export type VGParentRefType = {
 } | null;
 
 export interface VirtualGridWrapperProps {
-    gridWidth: number; // Количество столбцов в сетке
-    gridHeight: number; // Количество строк в сетке
+    gridWidth: number;
+    gridHeight: number;
     gridGap: number;
-    cellSize: number; // Размер клетки (px)
-    viewportWidth: number; // Ширина видимой области (px)
-    viewportHeight: number; // Высота видимой области (px)
+    cellSize: number;
+    viewportWidth: number;
+    viewportHeight: number;
     parentRef: RefObject<VGParentRefType>;
     children: (args: {
         visibleCells: Array<{ x: number; y: number }>;
@@ -56,7 +57,6 @@ const VirtualGridWrapper: React.FC<VirtualGridWrapperProps> = ({
         container: containerRef.current,
     }), [scroll]);
 
-    // Индексы строк/столбцов, которые реально видимы
     const startRow = Math.floor(scroll.top / cellSize);
     const endRow = Math.min(
         gridHeight - 1,
@@ -68,11 +68,9 @@ const VirtualGridWrapper: React.FC<VirtualGridWrapperProps> = ({
         Math.ceil((scroll.left + viewportWidth) / cellSize)
     );
 
-    // Массив видимых клеток (x, y)
     const numRows = endRow - startRow + 1;
     const numCols = endCol - startCol + 1;
 
-    // Получаем массив всех видимых клеток (x, y)
     const visibleCells = Array.from(
         { length: numRows * numCols },
         (_, idx) => ({

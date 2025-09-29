@@ -13,9 +13,11 @@
 .items-wrapper {
     width: 100%;
     overflow: auto;
+    padding: 12px;
 }
 
 .items-container {
     display: flex;
     flex-direction: column;
+    gap: 8px;
 }
