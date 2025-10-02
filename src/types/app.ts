@@ -1,18 +1,30 @@
+/**
+ * UI
+ */
 
+export interface TabConfig {
+    key: string;
+    label: string;
+    content: React.ReactNode;
+}
 
-export type UserStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
+/**
+ * User
+ */
 
-export enum UserRoles { 
-  User = 'user' , 
-  Admin = 'admin'
-};
+export type UserStatus = "idle" | "loading" | "succeeded" | "failed";
+
+export enum UserRoles {
+    User = "user",
+    Admin = "admin",
+}
 
 export interface IUser {
-  id: string,
-  username: string,
-  role: UserRoles,
-  isAuth: boolean,
-};
+    id: string;
+    username: string;
+    role: UserRoles;
+    isAuth: boolean;
+}
 
 /**
  * Item
@@ -21,19 +33,19 @@ export interface IUser {
 export type CellSize = {
     height: number;
     width: number;
-}
+};
 
 export type Coordinates = {
     x: number;
     y: number;
-}
+};
 
 export type GridPosition = {
     cPos: Coordinates;
     cSize: CellSize;
     cTarget?: Coordinates;
     coords?: Coordinates;
-}
+};
 
 export interface Item {
     id: string;
@@ -41,9 +53,9 @@ export interface Item {
     absPos?: Coordinates;
     color?: string;
     img?: string;
-};
+}
 
 export type DropArea = {
-    startPos: Coordinates,
-    endPos: Coordinates
-}  
+    startPos: Coordinates;
+    endPos: Coordinates;
+};
