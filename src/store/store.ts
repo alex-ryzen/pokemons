@@ -1,11 +1,23 @@
 import type { Action, ThunkAction } from '@reduxjs/toolkit'
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from './slices/userSlice'
 
+const api = createAPI()
+
+export const rootReducer = combineReducers({
+    user: userReducer,
+    item: itemReducer,
+    pokemon: pokemonReducer,
+})
+
 export const store = configureStore({
-    reducer: {
-        user: userReducer,
-    },
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => 
+        getDefaultMiddleware({
+            thunk: {
+                extraArgument: api
+            }
+        })
 })  
 
 // Get the type of our store variable

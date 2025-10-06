@@ -1,23 +1,27 @@
-import { Flex } from "antd";
+// import { Flex } from "antd";
 import React from "react";
 import { Outlet } from "react-router";
+import styles from "./authLayout.module.css"
 
 const AuthLayout = () => {
   return (
-    <Flex
-      vertical={false}
-      align="center"
-      justify="center"
-      style={{
-        minHeight: "100vh",
-        width: "100%",
-        display: "flex",
-      }}
-    >
-      <Flex vertical justify="center">
+    <div className={styles.mainContainer}>
         <Outlet/>
-      </Flex>
-    </Flex>
+    </div>
+    // <Flex
+    //   vertical={false}
+    //   align="center"
+    //   justify="center"
+    //   style={{
+    //     minHeight: "100vh",
+    //     width: "100%",
+    //     display: "flex",
+    //   }}
+    // >
+    //   <Flex vertical justify="center">
+    //     <Outlet/>
+    //   </Flex>
+    // </Flex>
   );
 }
 
