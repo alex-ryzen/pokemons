@@ -1,0 +1,46 @@
+.stats-wrapper {
+    padding: 10px 24px;
+}
+
+.stats-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.stat-poke-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.stat-poke-img {
+    border-radius: 6px;
+    width: 143px;
+    aspect-ratio: 1/1;
+}
+
+.stat-list-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.stat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.stat-list-item {
+
+}
+
+.stat-inp-container {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+

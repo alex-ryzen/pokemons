@@ -48,11 +48,11 @@
   transition: all 0.25s cubic-bezier(.25,1,.7,1);
 }
 
-.accordion--open .accordion-content-wrapper{
+.accordion-content-wrapper.content--open {
   height: auto;
 }
 
-.accordion--open .accordion-content-wrapper::before {
+.accordion-content-wrapper.content--open::before {
   content: '';
   position: absolute;
   z-index: 101;
@@ -63,7 +63,7 @@
   background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255, 0) 100%);
 }
 
-.accordion--open .accordion-content-wrapper::after {
+.accordion-content-wrapper.content--open::after {
   content: '';
   position: absolute;
   z-index: 101;
@@ -86,8 +86,8 @@
   padding: 8px 16px;
 }
 
-.accordion--open .accordion-content {
-  max-height: 56vh;
+.content--open .accordion-content {
+  /* max-height: 56vh; */
   overflow: auto;
   height: 100%;
   opacity: 1;

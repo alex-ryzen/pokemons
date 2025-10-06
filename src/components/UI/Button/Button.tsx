@@ -10,9 +10,10 @@ interface ButtonProps {
     link?: string;
     internalLink?: boolean;
     style?: CSSProperties;
+    innerStyle?: CSSProperties
 }
 
-const Button = forwardRef(({children: text, onClick, link, style, internalLink = true}: ButtonProps, ref: ButtonRef) => {
+const Button = forwardRef(({children: text, onClick, link, style, innerStyle, internalLink = true}: ButtonProps, ref: ButtonRef) => {
     return (
         link 
         ?
@@ -27,7 +28,7 @@ const Button = forwardRef(({children: text, onClick, link, style, internalLink =
                 </a> 
         : 
             <button ref={ref as Ref<HTMLButtonElement>} className={styles.button} style={style} onClick={onClick}>
-                <span>{text}</span>
+                <span style={innerStyle}>{text}</span>
             </button>
     );
 })

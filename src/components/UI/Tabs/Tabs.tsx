@@ -22,11 +22,11 @@ export const Tabs: FC<TabsProps> = ({
     return (
         <div className={styles.tabsWrapper}>
             <div className={styles.tabsContainer}>
-                <nav className={styles.tabsList} role="tablist">
+                <nav className={styles.tabsNavbar} role="tablist">
                     {tabs.map((tab) => (
                         <button
                             key={tab.key}
-                            className={`${styles.tabBtn}${
+                            className={`${styles.tabBtn} ${
                                 tab.key === activeTab ? styles.tabBtnActive : ""
                             }`}
                             role="tab"

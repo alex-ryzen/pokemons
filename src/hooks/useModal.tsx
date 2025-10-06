@@ -4,11 +4,14 @@ export function useModal() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const overlayRef = useRef<HTMLDivElement | null>(null);
 
-    const open = useCallback(() => 
-        setIsOpen(true), []
+    const open = useCallback(() => {
+            setIsOpen(true)
+            console.log('OPENED')
+        }, []
     );
-    const close = useCallback(() => 
-        setIsOpen(false), []
+    const close = useCallback(() => {
+            setIsOpen(false)
+        }, []
     );
 
     useEffect(() => {

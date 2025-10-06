@@ -3,6 +3,7 @@ import { Item } from '../../types/app';
 import BlockTitle from '../UI/BlockTitle/BlockTitle';
 import ItemCard, { ItemCardProps } from '../UI/ItemCard/ItemCard';
 import ItemGrid from '../UI/ItemGrid/ItemGrid';
+import ItemList from '../UI/ItemList/ItemList';
 import Select from '../UI/Select/Select';
 import styles from './shop.module.css'
 
@@ -80,19 +81,10 @@ const Shop = () => {
             <div className={styles.shop}>
                 <BlockTitle style={{padding: "16px"}}>Shop</BlockTitle>
                 <Select></Select>
-                <div className={styles.itemsWrapper}>
-                    <div className={styles.itemsContainer}
-                        style={{maxHeight: `calc(100vh - (2 + 2) * ${GENERAL_PADDING}px - ${GENERAL_GAP}px - ${HEADER_HEIGHT}px - ${ASIDE_CONTENT_GAP}px - ${FILTER_FIELD_HEIGHT}px - 2 * ${ASIDE_CONTENT_PADDING}px - 1em) `}}
-                    >
-                        {initShopItems.map((item, idx) => 
-                            <ItemCard key={idx} {...item}></ItemCard>
-                        )}
-                        {/* <ItemCard title='title' description='description' buttonTxt='BUY'></ItemCard>
-                        <ItemCard title='title' description='description' buttonTxt='BUY'></ItemCard>
-                        <ItemCard title='title' description='description' buttonTxt='BUY'></ItemCard> */}
-                    </div>
-                </div>
-                {/* <ItemGrid prefix='shop' initItems={initialItems2}></ItemGrid> */}
+                <ItemList 
+                    items={initShopItems}
+                    containerStyles={{maxHeight: `calc(100vh - (2 + 2) * ${GENERAL_PADDING}px - ${GENERAL_GAP}px - ${HEADER_HEIGHT}px - ${ASIDE_CONTENT_GAP}px - ${FILTER_FIELD_HEIGHT}px - 2 * ${ASIDE_CONTENT_PADDING}px - 1em) `}}
+                ></ItemList>
             </div>
         </div> 
     );

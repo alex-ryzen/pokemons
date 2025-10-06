@@ -13,6 +13,18 @@ interface AccordionProps {
 }
 
 function Accordion({ isOpen, title, onClick, children, sectionsCount }: AccordionProps) {
+    //const [show, setShow] = useState<boolean>(isOpen) //isOpen
+    // useEffect(() => {
+    //     if (isOpen) {
+    //         setTimeout(() => {
+    //             setShow(true)
+    //         }, 30)
+    //     } else {
+    //         setTimeout(() => {
+    //             setShow(false)
+    //         }, 300)
+    //     }
+    // }, [isOpen])
     return (
         <div
             className={`${styles.accordion} content-block ${
@@ -42,16 +54,18 @@ function Accordion({ isOpen, title, onClick, children, sectionsCount }: Accordio
                         </svg>
                     </div>
                 </div>
-                <div className={styles["accordion-content-wrapper"]}>
-                    <div
-                        className={styles["accordion-content"]}
-                        aria-hidden={!isOpen}
-                        style={ isOpen ? {maxHeight: `calc(100vh - ${HEADER_HEIGHT}px - ${GENERAL_PADDING}px * 2 - ${GENERAL_GAP}px - ${sectionsCount} * ${ACCORDION_HEIGHT}px - ${sectionsCount - 1} * ${ACCORDIONS_GAP}px)`} : {}} //100vh - header - generalPadding(top and bot) - generalGap - sectionCount * accordionHeight - (sectionCount-1 (it is accordionsGapCount)) * accordionsGap - contentMarginTop 
-                    >
-                        <div className={styles["accordion-inner"]}>{children}</div>
+                {/* {show && ( */}
+                    <div className={`${styles["accordion-content-wrapper"]} ${isOpen ? styles["content--open"] : ""}`}>
+                        <div
+                            className={styles["accordion-content"]}
+                            aria-hidden={!isOpen}
+                            style={ isOpen ? {maxHeight: `calc(100vh - ${HEADER_HEIGHT}px - ${GENERAL_PADDING}px * 2 - ${GENERAL_GAP}px - ${sectionsCount} * ${ACCORDION_HEIGHT}px - ${sectionsCount - 1} * ${ACCORDIONS_GAP}px)`} : {}} //100vh - header - generalPadding(top and bot) - generalGap - sectionCount * accordionHeight - (sectionCount-1 (it is accordionsGapCount)) * accordionsGap - contentMarginTop 
+                        >
+                            <div className={styles["accordion-inner"]}>{children}</div>
+                        </div>
                     </div>
-                </div>
-            </div> 
+                {/* )} */}
+            </div>
         </div>
     );
 }

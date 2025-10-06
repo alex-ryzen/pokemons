@@ -44,30 +44,5 @@
     display: block;
 }
 
-.entity-char-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.entity-char-name {
-    display: block;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 100%;
-    letter-spacing: 0;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-.entity-char-value {
-    display: block;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 100%;
-    letter-spacing: 0;
-}
-
 
 

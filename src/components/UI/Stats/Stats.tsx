@@ -1,0 +1,39 @@
+import { FC } from "react";
+import Button from "../Button/Button";
+import Input from "../Input/Input";
+import styles from "./stats.module.css"
+import Characteristic, { CharacteristicProps } from "../Characteristic/Characteristic";
+
+
+interface StatsProps {
+    stats: Array<CharacteristicProps>
+    img?: string;
+}
+
+const Stats: FC<StatsProps> = ({stats, img}) => {
+    return ( 
+        <div className={styles.statsWrapper}>
+            <div className={styles.statsContainer}>
+                <div className={styles.statPokeContainer}>
+                    <img className={styles.statPokeImg} src={img ?? '/images/placeholders/thumbnail.webp'} alt="" />
+                    <Button onClick={() => {console.log("D E L E T E D")}}>Удалить покемона</Button>
+                </div>
+                <div className={styles.statListContainer}>
+                    <ul className={styles.statList}>
+                        {stats.map((stat, idx) => 
+                            <li key={idx} className={styles.statListItem}>
+                                <Characteristic {...stat}></Characteristic>
+                            </li>
+                        )}
+                    </ul>
+                    <div className={styles.statInpContainer}>
+                        <Input placeholder="Псевдоним покемона"></Input>
+                        <Button onClick={() => {console.log("S A V E D")}} innerStyle={{padding: "4px 16px "}}>Сохранить</Button>
+                    </div>      
+                </div>
+            </div>
+        </div>
+    );
+}
+ 
+export default Stats;

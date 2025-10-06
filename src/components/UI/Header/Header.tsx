@@ -1,6 +1,7 @@
 import styles from './header.module.css'
 import BlockTitle from '../BlockTitle/BlockTitle'
 import Logo from '../LogoContainer/Logo';
+import { formatBalance } from '../../../utils/formatters';
 
 
 interface HeaderProps {
@@ -8,10 +9,6 @@ interface HeaderProps {
 }
 
 const Header = (headerProps: HeaderProps) => {
-    
-    const formatBalance = (num: number) => {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    };
     
     return ( 
         <header className={`${styles['header']} content-block`} id="header">

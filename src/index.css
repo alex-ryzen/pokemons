@@ -17,6 +17,8 @@
   --def-br: 16px;
   --def-fz: 16px;
   --text-color-op85: rgba(0, 0, 0, 0.85);
+  --label-color: rgba(0, 0, 0, 0.851);
+  --black-45: rgba(0,0,0,0.45);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -29,6 +31,7 @@
   --secondary-danger: rgba(250, 177, 160);
   --secondary-danger-op80: rgba(250, 177, 160, 0.8);
   --secondary-active-op50: rgba(63, 119, 197, 0.5);
+  --danger: #FF4D4F;
 }
 /* test#3178c6 */
 

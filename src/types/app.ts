@@ -1,5 +1,5 @@
 /**
- * UI
+ * types/app.ts - UI
  */
 
 export interface TabConfig {
@@ -9,7 +9,7 @@ export interface TabConfig {
 }
 
 /**
- * User
+ * types/app.ts - User
  */
 
 export type UserStatus = "idle" | "loading" | "succeeded" | "failed";
@@ -27,7 +27,7 @@ export interface IUser {
 }
 
 /**
- * Item
+ * types/app.ts - Item
  */
 
 export type CellSize = {

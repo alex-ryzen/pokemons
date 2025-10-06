@@ -3,7 +3,7 @@ import style from './homepage.module.css'
 import { CollapseProps } from "antd";
 import Accordion from "../../components/UI/Accordion/Accordion";
 import { Item } from "../../types/app";
-import EntityCard, { EntityCardProps, EntityProp } from "../../components/UI/EntityCard/EntityCard";
+import EntityCard, { EntityCardProps} from "../../components/UI/EntityCard/EntityCard";
 import MyPokemons from "../../components/MyPokemons/MyPokemons";
 
 
