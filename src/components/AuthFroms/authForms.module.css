@@ -1,0 +1,10 @@
+
+.auth-form-wrapper {
+    padding: 16px 24px 24px 24px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}

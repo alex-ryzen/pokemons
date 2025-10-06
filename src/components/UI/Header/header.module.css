@@ -19,9 +19,21 @@
     height: 100%;
 }
 
-.user-profile {
+/* .user-profile {
     clip-path: circle(50% at 50% 50%);
     background-color: var(--gray-100);
+} */
+.user-profile {
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user-profile, .user-profile > svg {
+    transition: all 0.3s ease;
+}
+.user-profile:hover > svg {
+    stroke: var(--secondary-active);
 }
 
 .balance-container {
@@ -29,6 +41,7 @@
     flex-direction: row;
     gap: 6px;
     align-items: center;
+    cursor: crosshair;
 }
 
 .balance-coin-icon {

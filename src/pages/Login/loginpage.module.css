@@ -1,0 +1,25 @@
+
+.auth-form-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-logo-container {
+    height: 54px;
+    padding: 0 36px;
+    width: 100%;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-content-container {
+    padding-top: 24px;
+}

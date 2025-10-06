@@ -27,8 +27,6 @@ const Modal: FC<ModalProps> = ({
     title
 }) => {
 
-    useEffect(() => {console.log(open)}, [open])
-
     if (!open) return null;
     else
         return ReactDOM.createPortal(
