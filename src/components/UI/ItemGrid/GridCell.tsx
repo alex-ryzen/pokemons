@@ -1,5 +1,5 @@
 import { useDroppable } from "@dnd-kit/core";
-import { CELL_SIZE } from "../../../store/consts";
+import { CELL_SIZE } from "../../../consts";
 import styles from './gridCell.module.css'
 import { CSSProperties, memo, useEffect, useRef, useState } from "react";
 

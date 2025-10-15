@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle, RefObject } from "react";
-import { CELL_SIZE, GRID_GAP, GRID_HEIGHT } from "../../../store/consts";
+import { CELL_SIZE, GRID_GAP, GRID_HEIGHT } from "../../../consts";
 
 //export type G = ReturnType<typeof GRID_GAP>
 

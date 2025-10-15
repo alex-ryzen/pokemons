@@ -3,7 +3,7 @@ import styles from './mainLayout.module.css'
 import { Outlet } from 'react-router';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import { GENERAL_GAP, GENERAL_PADDING, HEADER_HEIGHT } from '../../../store/consts';
+import { GENERAL_GAP, GENERAL_PADDING, HEADER_HEIGHT } from '../../../consts';
 import { DndContext } from '@dnd-kit/core';
 
 export interface MainLayoutProps {

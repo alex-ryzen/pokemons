@@ -1,5 +1,5 @@
 import { DropArea, type Item } from "../types/app";
-import { GRID_HEIGHT, GRID_WIDTH } from "../store/consts";
+import { GRID_HEIGHT, GRID_WIDTH } from "../consts";
 
 export class ItemGridFuncs {
     public static rectanglesIntersect(

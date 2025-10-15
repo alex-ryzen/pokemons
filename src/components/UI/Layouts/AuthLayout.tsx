@@ -8,20 +8,6 @@ const AuthLayout = () => {
     <div className={styles.mainContainer}>
         <Outlet/>
     </div>
-    // <Flex
-    //   vertical={false}
-    //   align="center"
-    //   justify="center"
-    //   style={{
-    //     minHeight: "100vh",
-    //     width: "100%",
-    //     display: "flex",
-    //   }}
-    // >
-    //   <Flex vertical justify="center">
-    //     <Outlet/>
-    //   </Flex>
-    // </Flex>
   );
 }
 

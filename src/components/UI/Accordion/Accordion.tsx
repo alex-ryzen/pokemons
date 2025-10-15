@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import BlockTitle from "../BlockTitle/BlockTitle";
 import styles from './accordion.module.css'
-import { ACCORDION_HEIGHT, ACCORDIONS_GAP, CONTENT_MARGIN_TOP, GENERAL_GAP, GENERAL_PADDING, HEADER_HEIGHT } from "../../../store/consts";
+import { ACCORDION_HEIGHT, ACCORDIONS_GAP, CONTENT_MARGIN_TOP, GENERAL_GAP, GENERAL_PADDING, HEADER_HEIGHT } from "../../../consts";
 
 
 interface AccordionProps {

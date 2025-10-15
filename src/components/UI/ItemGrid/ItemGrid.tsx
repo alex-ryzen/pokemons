@@ -5,7 +5,7 @@ import {
     GRID_GAP,
     CELL_SIZE,
     GENERAL_PADDING,
-} from "../../../store/consts";
+} from "../../../consts";
 import { type Item, type DropArea } from "../../../types/app";
 import {
     defaultDropAnimationSideEffects,

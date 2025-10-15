@@ -1,5 +1,5 @@
 import { CSSProperties, forwardRef, memo, ReactNode, Ref, useEffect } from "react";
-import { GRID_GAP, CELL_SIZE } from "../../../store/consts";
+import { GRID_GAP, CELL_SIZE } from "../../../consts";
 import { Item } from "../../../types/app";
 import styles from './gridItem.module.css'
 import { GridDraggableItemProps } from "./GridDraggableItem";

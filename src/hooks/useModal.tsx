@@ -6,7 +6,6 @@ export function useModal() {
 
     const open = useCallback(() => {
             setIsOpen(true)
-            console.log('OPENED')
         }, []
     );
     const close = useCallback(() => {

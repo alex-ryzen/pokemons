@@ -1,4 +1,4 @@
-import { ASIDE_CONTENT_GAP, ASIDE_CONTENT_PADDING, FILTER_FIELD_HEIGHT, GENERAL_GAP, GENERAL_PADDING, HEADER_HEIGHT } from '../../store/consts';
+import { ASIDE_CONTENT_GAP, ASIDE_CONTENT_PADDING, FILTER_FIELD_HEIGHT, GENERAL_GAP, GENERAL_PADDING, HEADER_HEIGHT } from '../../consts';
 import { Item } from '../../types/app';
 import BlockTitle from '../UI/BlockTitle/BlockTitle';
 import ItemCard, { ItemCardProps } from '../UI/ItemCard/ItemCard';
