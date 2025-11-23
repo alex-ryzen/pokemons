@@ -12,7 +12,7 @@ export interface GridItemProps extends Item {
 }
 
 const GridItem: React.FC<GridItemProps> = memo((item) => {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({ id: item.id});
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({id: item.id});
     return (
         <div
             data-item-id={item.id}

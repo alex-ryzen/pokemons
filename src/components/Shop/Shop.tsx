@@ -1,12 +1,46 @@
+import { FC, useEffect } from 'react';
 import { ASIDE_CONTENT_GAP, ASIDE_CONTENT_PADDING, FILTER_FIELD_HEIGHT, GENERAL_GAP, GENERAL_PADDING, HEADER_HEIGHT } from '../../consts';
-import { Item } from '../../types/app';
+import { Item, RangeData } from '../../types/app';
 import BlockTitle from '../UI/BlockTitle/BlockTitle';
 import ItemCard, { ItemCardProps } from '../UI/ItemCard/ItemCard';
 import ItemGrid from '../UI/ItemGrid/ItemGrid';
 import ItemList from '../UI/ItemList/ItemList';
 import Select from '../UI/Select/Select';
 import styles from './shop.module.css'
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchShopItems } from '../../services/api-actions';
+import { getShopItems } from '../../store/item-process/itemSelectors';
+import { FilterArgs, FilterContent, useFilter } from '../../hooks/useFilter';
+import { SortData, SortOption, useSort } from '../../hooks/useSort';
+import Filter from '../UI/Filter/Filter';
+import Sort from '../UI/Sort/Sort';
 
+const initialFilter: FilterArgs['content'] = {
+    product: {
+        type: "checkbox",
+        value: {
+            default: [
+                {name: 'pokeballs', label: 'Покеболлы'}, 
+                {name: 'berries', label: 'Ягоды'}
+            ], 
+            active: undefined
+        }
+    },
+    price: {
+        type: "range",
+        value: { default: {
+            name: 'price',
+            min: 0,
+            max: 1000
+        }, active: undefined} 
+    }   
+}
+const sortOptionList: Array<SortOption> = [
+    {optionName: "date", optionLabel: "Дата добавления"},
+    {optionName: "price", optionLabel: "Цена"}, 
+    {optionName: "level", optionLabel: "Уровень"}
+]
+const initialSort: SortData = {sortOption: sortOptionList[0], sortOrderBy: 'asc'}
 
 const initialItems2: Item[] = [
     {
@@ -75,16 +109,57 @@ const initShopItems: ItemCardProps[] =  [
     }
 ]
 
-const Shop = () => {
+export interface ShopQueryParams {
+    limit?: number;
+    offset?: number;
+    filter?: string;
+    sort?: string;
+}
+
+const Shop: FC = () => {
+    const dispatch = useAppDispatch()
+    const shopItems = getShopItems()
+
+    const {filterStr, filterContent, setActiveValue} = useFilter({content: initialFilter})
+    const {sortStr, sortData, setSortOption, toggleSortOrder} = useSort({initialSort: initialSort})
+
+    useEffect(() => {
+        
+        const qdata: ShopQueryParams = {
+            limit: 100,
+            offset: 0,
+            filter: filterStr,
+            sort: sortStr
+        }
+        console.log(JSON.stringify(qdata))
+        dispatch(fetchShopItems(qdata))
+    }, [])
+
     return ( 
         <div className={styles.shopWrapper}>
             <div className={styles.shop}>
                 <BlockTitle style={{padding: "16px"}}>Shop</BlockTitle>
-                <Select></Select>
-                <ItemList 
-                    items={initShopItems}
+                <Select mode='multiple' options={[
+                    {name: "berries", label: "Ягоды"}, 
+                    {name: "pokeballs", label: "Покеболлы"}
+                ]}>
+                    <Filter filterContent={filterContent} setActiveValue={setActiveValue}></Filter>
+                </Select>
+                <Sort options={sortOptionList} sortData={sortData} onChange={setSortOption} onToggle={toggleSortOrder}></Sort>
+                {/* <ItemList
+                    items={
+                        shopItems.map((item) => {
+                            const shopListItem: ItemCardProps = {
+                                title: `${item.name} ${item.level} уровня`,
+                                description: item.description || "",
+                                buttonTxt: `Купить за ${item.price}`,
+                                img: item.img
+                            }
+                            return shopListItem
+                        })
+                    }
                     containerStyles={{maxHeight: `calc(100vh - (2 + 2) * ${GENERAL_PADDING}px - ${GENERAL_GAP}px - ${HEADER_HEIGHT}px - ${ASIDE_CONTENT_GAP}px - ${FILTER_FIELD_HEIGHT}px - 2 * ${ASIDE_CONTENT_PADDING}px - 1em) `}}
-                ></ItemList>
+                ></ItemList> */}
             </div>
         </div> 
     );

@@ -1,4 +1,17 @@
-// 
+// general 
+export const Namespace = {
+    user: 'user',
+    item: 'item',
+    pokemon: 'pokemon',
+} as const;
+// export const Namespace = {
+//     auth: 'auth',
+//     user: 'user',
+//     shop: 'shop',
+//     garden: 'garden',
+//     inventory: 'inventory',
+//     pokemon: 'pokemon'
+// } as const;
 
 
 // layout

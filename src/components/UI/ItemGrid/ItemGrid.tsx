@@ -43,7 +43,7 @@ const ItemGrid: React.FC<ItemGridProps> = (props) => {
     // useEffect(() => {
     //     console.log('IS OVER!');
     // }, []);
-
+    
     useDndMonitor({
         onDragMove: handleDragMove,
         onDragStart: handleDragStart,
@@ -182,28 +182,7 @@ const ItemGrid: React.FC<ItemGridProps> = (props) => {
                         </>
                     )}
                 </VirtualGridWrapper>
-                 {createPortal(
-                    <DragOverlay 
-                        dropAnimation={{
-                            duration: dropAnimationDuration, 
-                            sideEffects: defaultDropAnimationSideEffects({
-                                styles: {
-                                    active: {
-                                        opacity: "1"
-                                    },
-                                }
-                            }),
-                        }}
-                        style={{willChange: "transform", cursor: "grabbing"}}
-                    >
-                        {draggedItem.current && 
-                            <GridItem
-                                isDragging={true}
-                                {...(items.find((i) => i.id === draggedItem.current?.id) ?? items[0])}
-                            />
-                        }
-                    </DragOverlay>
-                , document.body)}
+                 
             </div>
     );
 };

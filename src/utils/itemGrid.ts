@@ -28,22 +28,29 @@ export class ItemGridFuncs {
             cellX <= dropArea.endPos.x) && 
             (cellY >= dropArea.startPos.y &&
             cellY <= dropArea.endPos.y))
+        {
+            console.log('here')
             return (this.canPlace(items, item))
+        }
         else
+        {
+            console.log('HEREs')
             return true;
+        }
+            
     }
 
     public static canPlace(
         items: Item[],
         item: Item,
     ): boolean {
-        const x = item.targetX ?? 0
-        const y = item.targetY ?? 0
+        const x = item.gridSpec.cTarget?.x ?? 0
+        const y = item.gridSpec.cTarget?.y ?? 0
         if (
             x < 0 ||
             y < 0 ||
-            x + item.width > GRID_WIDTH ||
-            y + item.height > GRID_HEIGHT
+            x + item.gridSpec.cSize.width > GRID_WIDTH ||
+            y + item.gridSpec.cSize.height > GRID_HEIGHT
         )
             return false;
         return !items.some((other) => {
@@ -51,12 +58,12 @@ export class ItemGridFuncs {
             return this.rectanglesIntersect(
                 x,
                 y,
-                item.width,
-                item.height,
-                other.x,
-                other.y,
-                other.width,
-                other.height
+                item.gridSpec.cSize.width,
+                item.gridSpec.cSize.height,
+                other.gridSpec.cTarget?.x!,
+                other.gridSpec.cTarget?.y!,
+                other.gridSpec.cSize.width,
+                other.gridSpec.cSize.height
             );
         });
     }
@@ -64,19 +71,19 @@ export class ItemGridFuncs {
     public static getDropArea(draggedItemObj: Item | null): DropArea | null {
         if (
             !draggedItemObj ||
-            (!draggedItemObj.targetX && draggedItemObj.targetX !== 0) ||
-            (!draggedItemObj.targetY && draggedItemObj.targetY !== 0)
+            (!draggedItemObj.gridSpec.cTarget?.x && draggedItemObj.gridSpec.cTarget?.x !== 0) ||
+            (!draggedItemObj.gridSpec.cTarget?.y && draggedItemObj.gridSpec.cTarget?.y !== 0)
         ) {
             return null;
         }
         return {
             startPos: {
-                x: draggedItemObj.targetX,
-                y: draggedItemObj.targetY,
+                x: draggedItemObj.gridSpec.cTarget?.x,
+                y: draggedItemObj.gridSpec.cTarget?.y,
             },
             endPos: {
-                x: draggedItemObj.targetX + draggedItemObj.width - 1,
-                y: draggedItemObj.targetY + draggedItemObj.height - 1,
+                x: draggedItemObj.gridSpec.cTarget?.x + draggedItemObj.gridSpec.cSize.width - 1,
+                y: draggedItemObj.gridSpec.cTarget?.y + draggedItemObj.gridSpec.cSize.height - 1,
             },
         };
     }

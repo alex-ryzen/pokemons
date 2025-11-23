@@ -1,0 +1,30 @@
+/*checkbox list*/
+.checkbox-list-wrapper {
+
+}
+
+.checkbox-list {
+
+}
+
+/*checkbox unit*/
+.checkbox-wrapper {
+
+}
+
+.checkbox-wrapper > label {
+    display: flex;
+    gap: 4px;
+}
+
+.checkbox-input {
+
+}
+
+.checkbox-container {
+
+}
+
+.checkbox-custom-box {
+
+}

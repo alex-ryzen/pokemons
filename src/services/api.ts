@@ -84,7 +84,7 @@ export const createAPI = (): AxiosInstance => {
                     return api.request(originalRequest);
                 } catch (err) {
                     processQueue(err, null);
-                    console.log('- unauthorized -');
+                    console.log('- - - unauthorized - - -');
                     return Promise.reject(err);
                 } finally {
                     isRefreshing = false;

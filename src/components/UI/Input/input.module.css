@@ -15,7 +15,7 @@
     align-self: flex-start;
 }
 
-.input-label-container > span {
+.input-label-container>span {
     display: flex;
     align-self: center;
     justify-content: center;

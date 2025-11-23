@@ -1,0 +1,7 @@
+.sort-container {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+}
