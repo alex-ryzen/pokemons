@@ -1,41 +1,39 @@
-import { useDroppable } from "@dnd-kit/core";
-import { CELL_SIZE } from "../../../consts";
-import styles from './gridCell.module.css'
-import { CSSProperties, memo, useEffect, useRef, useState } from "react";
+import { FC, HTMLAttributes, memo, ReactNode } from "react";
+import styles from "./itemGrid.module.css"
+import { UniqueIdentifier } from "@dnd-kit/core";
+import { CELL_SIZE, GRID_GAP } from "../../../consts";
 
-
-export interface GridCellProps {
-  id: string;
-  isDroppable: boolean;
-  isCovered?: boolean;
-  style?: CSSProperties;
+export interface IGridCellProps {
+    id: UniqueIdentifier;
+    x: number;
+    y: number;
+    isValid: boolean;
+    isCovered: boolean;
 }
 
-const GridCell: React.FC<GridCellProps> = memo(({ id, isDroppable, isCovered, style}) => {
-  // const {setNodeRef} = useDroppable({id})
-  // const cellData = useRef<string>(id);
-  // useEffect(() => {console.log("rerendered")}, [isDroppable, isCovered])
-  return (
-    <div
-      //ref={setNodeRef}
-      data-cell-id={id}
-      className={styles.gridCell}
-      style={{
-        ...style, 
-        width: CELL_SIZE,
-        height: CELL_SIZE,
-        background: isCovered ? isDroppable ? "var(--secondary-active-op50)" : "var(--secondary-danger-op80)" : "var(--gray-100)",
-        //background: isCovered ? isDroppable ? "#d7fcffff" : "#fab1a0" : "#efefef",
-      }}
-    >
-      <span style={{
-        fontSize: "12px",
-        color: "#cecece",
-        textAlign: "center"
-      }}>{id}</span>
-    </div>
-  );
-},
+export const GridCell: FC<IGridCellProps> = memo(
+    ({ id, x, y, isValid, isCovered }) => {
+        return (
+            <div
+                className={styles.itemGridCell}
+                data-cell-id={id}
+                style={{
+                    position: "absolute",
+                    left: x * (CELL_SIZE + GRID_GAP),
+                    top: y * (CELL_SIZE + GRID_GAP),
+                    width: CELL_SIZE,
+                    height: CELL_SIZE,
+                    background: isCovered
+                        ? isValid
+                            ? "#59ff7d"
+                            : "#eb546d"
+                        : "#EFEFEF",
+                }}
+            >
+                {`${id}-${y}-${x}`}
+            </div>
+        );
+    }
 );
 
-export default GridCell;
+//isCovered ? isDroppable ? "var(--secondary-active-op50)" : "var(--secondary-danger-op80)" : "var(--gray-100)"

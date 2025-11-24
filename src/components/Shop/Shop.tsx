@@ -3,7 +3,7 @@ import { ASIDE_CONTENT_GAP, ASIDE_CONTENT_PADDING, FILTER_FIELD_HEIGHT, GENERAL_
 import { Item, RangeData } from '../../types/app';
 import BlockTitle from '../UI/BlockTitle/BlockTitle';
 import ItemCard, { ItemCardProps } from '../UI/ItemCard/ItemCard';
-import ItemGrid from '../UI/ItemGrid/ItemGrid';
+import ItemGrid from '../UI/ItemGrid/GridArea';
 import ItemList from '../UI/ItemList/ItemList';
 import Select from '../UI/Select/Select';
 import styles from './shop.module.css'

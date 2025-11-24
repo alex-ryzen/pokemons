@@ -1,10 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchShopItems, purchaseItem } from "../../services/api-actions";
-import { Item, ShopItem } from "../../types/app";
+import { IItem, IShopItem } from "../../types/app";
+import { UniqueIdentifier } from "@dnd-kit/core";
 
-interface ItemState {
-    items: Item[];
-    shopItems: ShopItem[];
+export type ItemCellPos = Pick<IItem, "cPosX" | "cPosY" | "gridId">;
+
+export interface ItemState {
+    items: IItem[];
+    shopItems: IShopItem[];
     isLoading: boolean;
     error: string | null;
 }
@@ -17,14 +20,31 @@ const initialState: ItemState = {
 };
 
 export const itemSlice = createSlice({
-    name: "item",
-    initialState,
+    name: "items",
+    initialState: initialState,
     reducers: {
-        setInventoryItems: (state, action: { payload: Item[] }) => {
+        setInventoryItems: (state, action: { payload: IItem[] }) => {
             state.items = action.payload;
         },
-        setShopItems: (state, action: { payload: ShopItem[] }) => {
+        setShopItems: (state, action: { payload: IShopItem[] }) => {
             state.shopItems = action.payload;
+        },
+        setItems: (state, action: PayloadAction<IItem[]>) => {
+            state.items = [...action.payload];
+        },
+        setPosition: (
+            state,
+            action: PayloadAction<{ id: IItem["id"]; pos: ItemCellPos }>
+        ) => {
+            if (!state.items) return;
+            const currentItem = state.items.find((i) => i.id === action.payload.id);
+            if (currentItem) {
+                //console.log(action.payload.pos.cPosX, action.payload.pos.cPosY);
+                currentItem.cPosX = action.payload.pos.cPosX;
+                currentItem.cPosY = action.payload.pos.cPosY;
+                currentItem.gridId = action.payload.pos.gridId;
+            }
+            //console.log(JSON.stringify(state.items));
         },
     },
     extraReducers: (builder) => {
@@ -67,6 +87,6 @@ export const itemSlice = createSlice({
             });
     },
 });
-export const { setShopItems } = itemSlice.actions;
+export const { setShopItems, setItems, setPosition } = itemSlice.actions;
 
 export default itemSlice.reducer;

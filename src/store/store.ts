@@ -12,8 +12,8 @@ const api = createAPI()
 
 export const rootReducer = combineReducers({
     user: userReducer,
-    item: itemReducer,
-    pokemon: pokemonReducer,
+    items: itemReducer,
+    pokemons: pokemonReducer,
 })
 
 export const store = configureStore({

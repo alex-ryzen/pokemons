@@ -2,7 +2,9 @@
  * types/app.ts - UI
  */
 
-export interface TabConfig {
+import { UniqueIdentifier } from "@dnd-kit/core";
+
+export type TabConfig = {
     key: string;
     label: string;
     content: React.ReactNode;
@@ -12,8 +14,9 @@ export type ListedData = {
     name: string;
     label: string;
 }
-export type RangeData = {name: string, min: number | "", max: number | ""}
+export type RangeData = { name: string; min: number | ""; max: number | "" }
 
+export type ScrollOffset = { top: number; left: number };
 /**
  * types/app.ts - User
  */
@@ -45,54 +48,26 @@ export interface IPlayer {
 }
 
 /**
- * types/app.ts - Item
+ * types/app.ts - Grid
  */
-
-export type CellSize = {
-    height: number;
-    width: number;
-};
-
-export type Coordinates = {
-    x: number;
-    y: number;
-};
-
-export type GridPosition = {
-    cPos: Coordinates;
-    cSize: CellSize;
-    cTarget?: Coordinates;
-    coords?: Coordinates;
-};
-
-export interface Item extends Partial<ShopItem> {
-    id: string;
-    gridSpec: GridPosition;
-    absPos?: Coordinates;
-    color?: string;
-    img?: string;
+export interface Grid {
+  id: UniqueIdentifier;
+  data: GridAreaData;
 }
-
-export type DropArea = {
-    startPos: Coordinates;
-    endPos: Coordinates;
+export type GridTypes = "inv" | "grdn";
+export type GridAreaData = {
+  accepts?: GridTypes[];
 };
 
 
-/**
- * types/app.ts - Garden
- */
-
-export interface GardenItem extends Item { // or Item & {...}
-    growStart: string; // timestamp
-    duration: number;
-}
 /**
  * types/app.ts - Shop
  */
 
-export interface ShopItem {
-    name: string,
+export interface IShopItem {
+    id: UniqueIdentifier | string;
+    itemId: string,
+    title: string,
     price: number,
     category: string,
     description?: string,
@@ -100,16 +75,82 @@ export interface ShopItem {
     img?: string,
 }
 
+/**
+ * types/app.ts - Item - General instance /Grid instance / Tile instance
+ */
+
+export interface IItem extends Partial<IShopItem> { //Pick<ShopItem, "title" | "category" | "level">
+    id: UniqueIdentifier | string;
+    gridId: UniqueIdentifier;
+    itemId: string;
+    cSize: number; // because height = width
+    cPosX: number;
+    cPosY: number;
+    img?: string;
+}
+
+export interface IGridItem extends IItem {
+    cTargetX?: number;
+    cTargetY?: number;
+    absSize?: number; // because height = width
+    absX?: number;
+    absY?: number;
+    absTargetX?: number;
+    absTargetY?: number;
+}
+
+export type DropArea = {
+    startX: number;
+    startY: number;
+    endX: number;
+    endY: number;
+};
+
+export interface IBerry extends IItem { // or Item & {...}
+    isGrowing: boolean;
+    bonus: number;
+    status?: string; // for any cases 
+    growStart: Date; // timestamp
+    growFinish?: Date; // timestamp
+    growthTime: number; // duration
+    currentSize: number;
+    grownSize: number;
+}
+
+export interface IPokeball extends IItem {
+    chance: number;
+}
+
+/**
+ * types/app.ts - Garden
+ */
+
+export interface IGarden {
+    gardenSize: number;
+    growthSpeed?: number;
+}
+
+export interface IGardenService {
+    title: string;
+    price: number;
+    category: string;
+    type: 'single-use' | 'persistent';
+    value: number | string; // bonus value
+    isActive?: boolean;
+    duration?: number | Date;
+    startedAt?: Date;
+}
+
 
 /**
  * types/app.ts - Pokemons
  */
 
-export type Pokemon = {
+export type IPokemon = {
     name: string,
     species: string,
     weight: number,
-    income: number,
+    income: number, // mps
     summary: number,
     age: number,
     img: string,

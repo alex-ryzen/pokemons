@@ -18,6 +18,13 @@ div#root {}
   border-radius: 1rem;
 }
 
+body.is-dragging {
+    cursor: grabbing !important;
+}
+body.is-dragging * {
+    cursor: grabbing !important;
+}
+
 /* #root {
   max-width: 1280px;
   margin: 0 auto;

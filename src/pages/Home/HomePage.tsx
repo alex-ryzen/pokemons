@@ -2,6 +2,7 @@ import { useState, type FC } from "react";
 import style from './homepage.module.css'
 import Accordion from "../../components/UI/Accordion/Accordion";
 import MyPokemons from "../../components/MyPokemons/MyPokemons";
+import Garden from "../../components/Garden/Garden";
 
 
 type MidItem = {
@@ -14,7 +15,7 @@ const HomePage = () => {
     const [openIdx, setOpenIdx] = useState<number | null>(null);
     const miditems: MidItem[] = [
         { key: "1" , title: "My Pokemons", content: <MyPokemons/>},
-        { key: "2" , title: "Garden", content: <>Содержимое второго пункта</> },
+        { key: "2" , title: "Garden", content: <Garden/> },
         { key: "3" , title: "Hunt", content: 
             <>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam magna velit, venenatis eget convallis ut, elementum non metus. Maecenas turpis neque, fermentum at congue ut, rhoncus eu erat. Integer ultricies a nisi et tincidunt. Donec commodo sapien eu nibh tempor, a sodales leo mollis. Integer sollicitudin enim suscipit odio fermentum, vel molestie urna semper. Mauris nisi lectus, feugiat id lacinia quis, placerat eu purus. Aliquam erat volutpat. Integer eu tellus in nibh condimentum maximus. Cras non leo quis sapien imperdiet sodales. Proin scelerisque feugiat nisl a pellentesque. Cras vitae porttitor quam. Donec imperdiet ex non neque pharetra commodo. Vivamus commodo at mauris eget ullamcorper. Duis pretium metus id diam convallis facilisis. Pellentesque sagittis justo ut purus tincidunt aliquet.
