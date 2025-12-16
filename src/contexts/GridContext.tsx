@@ -6,6 +6,8 @@ import React, {
     useCallback,
     FC,
     ReactNode,
+    useEffect,
+    useMemo,
 } from "react";
 import {
     UniqueIdentifier,
@@ -20,31 +22,44 @@ import { GridWindowHandle } from "../components/UI/ItemGrid/GridWindow";
 import { DropArea, IGridItem } from "../types/app";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { CELL_SIZE, GRID_GAP, SCROLL_MARGIN, SCROLL_SPEED } from "../consts";
-import { setPosition } from "../store/item-process/itemSlice";
+import { setPosition } from "../store/item-process/inventorySlice";
 
-interface GridContextType {
+interface GridActionsType {
     registerGrid: (id: UniqueIdentifier) => (handle: GridWindowHandle | null) => void;
-    activeItem: IGridItem | null;
-    dropArea: DropArea | null;
     handleDragStart: (e: DragStartEvent) => void;
     handleDragMove: (e: DragMoveEvent) => void;
     handleDragEnd: (e: DragEndEvent) => void;
     handleDragCancel: () => void;
 }
 
-export const GridContext = createContext<GridContextType | null>(null);
+interface GridStateType {
+    activeItem: IGridItem | null;
+    dropArea: DropArea | null;
+}
 
-export const GridProvider: FC<{ children: ReactNode }> = ({children}) => {
+export const GridActionsCTX = createContext<GridActionsType | null>(null);
+export const GridStateCTX = createContext<GridStateType | null>(null)
+
+export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const dispatch = useAppDispatch();
-    const items = useAppSelector((s) => s.items.items);
+    const items = useAppSelector((s) => s.inventory.items);
 
-    const [activeItem, setActiveItem] = useState<IGridItem | null>(null);
+    const activeItem = useRef<IGridItem | null>(null)
+    //const [activeItem, setActiveItem] = useState<IGridItem | null>(null);
     const [dropArea, setDropArea] = useState<DropArea | null>(null);
 
     const gridRefs = useRef<Record<UniqueIdentifier, GridWindowHandle | null>>(
         {}
     );
     const autoScrollTimer = useRef<number | null>(null);
+
+    useEffect(() => {
+        if (activeItem.current) {
+            document.body.classList.add("is-dragging");
+        } else {
+            document.body.classList.remove("is-dragging");
+        }
+    }, [activeItem]);
 
     const registerGrid = useCallback(
         (id: UniqueIdentifier) => (handle: GridWindowHandle | null) => {
@@ -85,11 +100,16 @@ export const GridProvider: FC<{ children: ReactNode }> = ({children}) => {
         (e: DragStartEvent) => {
             const found = items.find((i) => i.id === e.active.id);
             if (found) {
-                setActiveItem({
+                // setActiveItem({
+                //     ...found,
+                //     cTargetX: found.cPosX,
+                //     cTargetY: found.cPosY,
+                // });
+                activeItem.current = {
                     ...found,
                     cTargetX: found.cPosX,
                     cTargetY: found.cPosY,
-                });
+                }
             }
         },
         [items]
@@ -98,7 +118,7 @@ export const GridProvider: FC<{ children: ReactNode }> = ({children}) => {
     const handleDragMove = useCallback(
         (e: DragMoveEvent) => {
             const { active, over } = e;
-            if (!activeItem) return;
+            if (!activeItem.current) return;
 
             if (!over || over.data.current?.type !== "grid") {
                 stopAutoScroll();
@@ -144,21 +164,22 @@ export const GridProvider: FC<{ children: ReactNode }> = ({children}) => {
             const cy = Math.round(localY / totalSize);
 
             if (
-                cx !== activeItem.cTargetX ||
-                cy !== activeItem.cTargetY ||
-                activeItem.gridId !== gridId
+                cx !== activeItem.current.cTargetX ||
+                cy !== activeItem.current.cTargetY ||
+                activeItem.current.gridId !== gridId
             ) {
                 const newItemState = {
-                    ...activeItem,
+                    ...activeItem.current,
                     gridId: gridId,
                     cTargetX: cx,
                     cTargetY: cy,
                 };
-                setActiveItem(newItemState);
-                setDropArea(IGF.getDropArea(newItemState));
+                //setActiveItem(newItemState);
+                activeItem.current = newItemState
+                setDropArea(IGF.getDropArea(activeItem.current));
             }
         },
-        [activeItem]
+        []
     );
 
     const handleDragEnd = useCallback(
@@ -166,9 +187,10 @@ export const GridProvider: FC<{ children: ReactNode }> = ({children}) => {
             stopAutoScroll();
             const { active } = e;
 
-            const finalItem = activeItem;
+            const finalItem = activeItem.current;
 
-            setActiveItem(null);
+            //setActiveItem(null);
+            activeItem.current = null;
             setDropArea(null);
 
             if (finalItem) {
@@ -196,22 +218,28 @@ export const GridProvider: FC<{ children: ReactNode }> = ({children}) => {
 
     const handleDragCancel = useCallback(() => {
         stopAutoScroll();
-        setActiveItem(null);
+        //setActiveItem(null);
+        activeItem.current = null;
         setDropArea(null);
     }, []);
 
-    const value = {
+    const actions = useMemo(() => ({
         registerGrid,
-        activeItem,
-        dropArea,
         handleDragStart,
         handleDragMove,
         handleDragEnd,
-        handleDragCancel,
-    };
+        handleDragCancel
+    }), [registerGrid, handleDragStart, handleDragMove, handleDragEnd, handleDragCancel]);
+
+    const state = useMemo(() => ({
+        activeItem: activeItem.current,
+        dropArea
+    }), [activeItem, dropArea]);
     return (
-        <GridContext.Provider value={value}>
-            {children}
-        </GridContext.Provider>
+        <GridActionsCTX.Provider value={actions}>
+            <GridStateCTX.Provider value={state}>
+                {children}
+            </GridStateCTX.Provider>
+        </GridActionsCTX.Provider>
     );
 };

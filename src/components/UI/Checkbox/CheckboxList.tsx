@@ -5,28 +5,28 @@ import { ListedData } from "../../../types/app";
 
 export interface CheckboxListProps {
     defaultCheckboxes: ListedData[]
-    activeCheckboxes?: Set<string>
-    onChange: (value: Set<string>) => void;
+    activeCheckboxes?: ListedData[]//Set<string>
+    onChange: (value: ListedData[]) => void;
 }
 
 const CheckboxList: FC<CheckboxListProps> = ({ defaultCheckboxes, activeCheckboxes, onChange }) => {
     
-    const toggle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const {name} = e.target
-        const newSet = new Set<string>(activeCheckboxes)
-        if (newSet.has(name)) {
-            newSet.delete(name)
-        } else {
-            newSet.add(name);
-        }
-        onChange(newSet)
-    }, [onChange, activeCheckboxes]);
+    const toggle = useCallback((_: ChangeEvent<HTMLInputElement>, cb: ListedData) => {
+        const {name} = cb
+        const rec = activeCheckboxes ? [...activeCheckboxes].find(a => a.name === name) : null
+        const newActiveArr: ListedData[] = 
+            activeCheckboxes ? 
+                (rec ? activeCheckboxes.filter(a => a.name !== rec.name) 
+                    : [...activeCheckboxes, cb]
+                ) : []
+        onChange(newActiveArr)
+    }, [onChange, defaultCheckboxes]);
 
     return (
         <div className={styles.checkboxListWrapper}>
             <ul className={styles.checkboxList} aria-multiselectable='true'>
                 {defaultCheckboxes.map((cb, idx) =>
-                    <Checkbox key={idx} name={`${cb.name}`} label={cb.label} isChecked={activeCheckboxes?.has(cb.name) || false} onChange={toggle} />
+                    <Checkbox key={idx} name={`${cb.name}`} label={cb.label} isChecked={!!activeCheckboxes?.find(a => a.name === cb.name) || false} onChange={e => toggle(e, cb)} />
                 )}
             </ul>
         </div>

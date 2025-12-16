@@ -1,36 +1,35 @@
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent, MouseEvent, TouchEvent } from "react";
 import styles from './sort.module.css'
-import { useSort, SortData, SortOption } from "../../../hooks/useSort";
+import Select from "../Select/Select";
+import { ListedData } from "../../../types/app";
+
+// opt.name format: "name-order", where name - name of sort, and order = asc | desc
 
 interface SortProps {
-    options: SortOption[];
-    sortData: SortData;
-    onChange: (optName: SortOption['optionName']) => void;
-    onToggle: () => void;
+    options: ListedData[];
+    sortName: string;
+    setSort: (selected: string) => void;
+    hasApplied?: (applied: boolean) => void;
 }
 
-const Sort: FC<SortProps> = ({ options, sortData, onChange, onToggle}) => {
-    
-    const handleOptionChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        onChange(e.target.value);
+const Sort: FC<SortProps> = ({ options, sortName, setSort, hasApplied}) => {
+    const handleOptionSelect = (opt: ListedData) => { // ChangeEvent<HTMLSelectElement>
+        setSort(opt.name);
+        if (hasApplied) hasApplied(false);
     };
-    // пока дефолт select; todo: custom select element
     return (
         <div className={styles.sortContainer}>
-            <label>
+            <label 
+                htmlFor={sortName} 
+                className={styles.sortLabel}
+            >
                 Сортировать по:
-                <select value={sortData.sortOption.optionName} onChange={handleOptionChange}>
-                    {options.map((opt, idx) => (
-                        <option key={`opt_${idx}`} value={opt.optionName}>
-                            {opt.optionLabel}
-                        </option>
-                    ))}
-                </select>
             </label>
-
-            <button onClick={onToggle} aria-label="Toggle sort order">
-                {sortData.sortOrderBy === "asc" ? "⬆️" : "⬇️"}
-            </button>
+            <Select
+                options={options} 
+                name={sortName}
+                onSelect={handleOptionSelect}>
+            </Select>
         </div>
     );
 };

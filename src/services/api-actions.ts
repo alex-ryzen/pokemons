@@ -1,21 +1,23 @@
 // api-actions.ts
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance, AxiosError } from 'axios';
-import { IPlayer, IUser, Pokemon, ShopItem } from '../types/app';
-import { AuthResponse } from './api';
+import { IPlayer, IUser, IPokemon, IShopItem, RegisterData, LoginData } from '../types/app';
+import { AuthResponse } from './api.tsx';
 import { AppDispatch, RootState } from '../store/store';
-import { itemSlice, setShopItems } from '../store/item-process/itemSlice';
 import { ShopQueryParams } from '../components/Shop/Shop';
+import { sleep } from '../utils/functions';
 
 interface ThunkApiConfig {
     dispatch: AppDispatch;
     state: RootState;
     extra: AxiosInstance;
-    rejectValue: string;
+    rejectValue: ErrorResponse;
 }
-export type RegisterData = { username: string; email: string; password: string };
-export type LoginData = { username: string; password: string };
 
+export type ErrorResponse = {
+    message?: string;
+    errors?: { path: string; message: string; code?: string }[];
+};
 
 // api actions
 
@@ -29,8 +31,8 @@ export const registerUser = createAsyncThunk<
         localStorage.setItem('token', response.data.accessToken);
         return response.data;
     } catch (err) {
-        const error = err as AxiosError<{ message: string }>;
-        return rejectWithValue(error.response?.data?.message || 'Registration error');
+        const error = err as AxiosError<ErrorResponse>;
+        return rejectWithValue(error.response?.data ?? {message: 'Registration error'});
     }
 });
 
@@ -44,8 +46,9 @@ export const loginUser = createAsyncThunk<
         localStorage.setItem('token', response.data.accessToken);
         return response.data;
     } catch (err) {
-        const error = err as AxiosError<{ message: string }>;
-        return rejectWithValue(error.response?.data?.message || 'Login error');
+        
+        const error = err as AxiosError<ErrorResponse>;
+        return rejectWithValue(error.response?.data ?? {message: 'Login error'});
     }
 });
 
@@ -59,8 +62,8 @@ export const fetchInitData = createAsyncThunk<
         
         return response.data;
     } catch (err) {
-        const error = err as AxiosError<{ message: string }>;
-        return rejectWithValue(error.response?.data?.message || 'Getting user\'s info error...');
+        const error = err as AxiosError<ErrorResponse>;
+        return rejectWithValue(error.response?.data ?? {message: 'Getting user\'s info error...'});
     }
 });
 
@@ -74,14 +77,14 @@ export const fetchBalance = createAsyncThunk<
         const response = await api.get<number | string>('/user/balance');
         return response.data;
     } catch (err) {
-        const error = err as AxiosError<{ message: string }>;
-        return rejectWithValue(error.response?.data?.message || 'Failed to get balance');
+        const error = err as AxiosError<ErrorResponse>;
+        return rejectWithValue(error.response?.data ?? {message: 'Failed to get balance'});
     }
 });
 
 
 export type UserPokemons = {
-    pokemons: Pokemon[]
+    pokemons: IPokemon[]
 }
 export const fetchUserPokemons = createAsyncThunk<
     UserPokemons,
@@ -92,27 +95,34 @@ export const fetchUserPokemons = createAsyncThunk<
         const response = await api.get('/user/pokemons');
         return response.data;
     } catch (err) {
-        const error = err as AxiosError<{ message: string }>;
-        return rejectWithValue(error.response?.data?.message || 'Failed to load pokemons');
+        const error = err as AxiosError<ErrorResponse>;
+        return rejectWithValue(error.response?.data ?? {message: 'Failed to load pokemons'});
     }
 });
 
 export type ShopItems = {
-    items: ShopItem[];
+    items: IShopItem[];
+    total: number;
+    isReset: boolean;
 }
 export const fetchShopItems = createAsyncThunk<
-    ShopItems | void,
+    ShopItems,
     ShopQueryParams | undefined,
     ThunkApiConfig
->('shop/fetchItems', async (params, {dispatch, extra: api, rejectWithValue }) => {
+>('shop/fetchItems', async (params, {dispatch, getState, extra: api, rejectWithValue }) => {
     try {
-        const response = await api.get('/shop/items', { params });
-        dispatch(setShopItems(response.data))
-        console.log(params)
-        //return response.data;
+        await sleep(1500);
+        const state = getState() as RootState;
+        const prev = state.shop.query;
+        const isReset = prev?.filter !== params?.filter || prev?.sort !== params?.sort || prev?.search !== params?.search || params?.offset === 0;
+        console.log("prev: ", prev, "new: ", params, isReset)
+        const response = await api.get<ShopItems>('/shop/items', { params });
+        //dispatch(pushShopItems(response.data))
+        response.data.isReset = isReset
+        return await response.data;
     } catch (err) {
-        const error = err as AxiosError<{ message: string }>;
-        return rejectWithValue(error.response?.data?.message || 'Shop load error');
+        const error = err as AxiosError<ErrorResponse>;
+        return rejectWithValue(error.response?.data ?? {message: 'Shop load error'});
     }
 });
 
@@ -126,8 +136,8 @@ export const purchaseItem = createAsyncThunk<
         const response = await api.post('/shop/purchase', data);
         return response.data;
     } catch (err) {
-        const error = err as AxiosError<{ message: string }>;
-        return rejectWithValue(error.response?.data?.message || 'Purchase failed');
+        const error = err as AxiosError<ErrorResponse>;
+        return rejectWithValue(error.response?.data ?? {message: 'Purchase failed'});
     }
 });
 
@@ -140,8 +150,8 @@ export const plantSeed = createAsyncThunk<
         const response = await api.post('/garden/plant', data);
         return response.data;
     } catch (err) {
-        const error = err as AxiosError<{ message: string }>;
-        return rejectWithValue(error.response?.data?.message || 'Planting failed');
+        const error = err as AxiosError<ErrorResponse>;
+        return rejectWithValue(error.response?.data ?? {message: 'Planting failed'});
     }
 });
 
@@ -154,8 +164,8 @@ export const cancelPlant = createAsyncThunk<
         const response = await api.post('/garden/cancel', data);
         return response.data;
     } catch (err) {
-        const error = err as AxiosError<{ message: string }>;
-        return rejectWithValue(error.response?.data?.message || 'Cancel failed');
+        const error = err as AxiosError<ErrorResponse>;
+        return rejectWithValue(error.response?.data ?? {message: 'Cancel failed'});
     }
 });
 
@@ -168,7 +178,7 @@ export const syncGrowthTimers = createAsyncThunk<
         const response = await api.post('/garden/sync-growth', data);
         return response.data;
     } catch (err) {
-        return rejectWithValue('Sync failed');
+        return rejectWithValue({message: 'Sync failed'});
     }
 });
 
@@ -181,7 +191,7 @@ export const buyGardenOption = createAsyncThunk<
         const response = await api.post('/garden/buy-option', data);
         return response.data;
     } catch {
-        return rejectWithValue('Garden option purchase failed');
+        return rejectWithValue({message: 'Garden option purchase failed'});
     }
 });
 
@@ -194,7 +204,7 @@ export const feedPokemon = createAsyncThunk<
         const response = await api.post('/pokemon/feed', data);
         return response.data;
     } catch {
-        return rejectWithValue('Feed failed');
+        return rejectWithValue({message: 'Feed failed'});
     }
 });
 
@@ -207,7 +217,7 @@ export const deletePokemon = createAsyncThunk<
         const response = await api.delete('/pokemon/delete', { data });
         return response.data;
     } catch {
-        return rejectWithValue('Delete failed');
+        return rejectWithValue({message: 'Delete failed'});
     }
 });
 
@@ -220,7 +230,7 @@ export const renamePokemon = createAsyncThunk<
         const response = await api.patch('/pokemon/rename', data);
         return response.data;
     } catch {
-        return rejectWithValue('Rename failed');
+        return rejectWithValue({message: 'Rename failed'});
     }
 });
 
@@ -233,7 +243,7 @@ export const buyInventoryExtension = createAsyncThunk<
         const response = await api.post('/inventory/buy-extension', data);
         return response.data;
     } catch {
-        return rejectWithValue('Inventory extension failed');
+        return rejectWithValue({message: 'Inventory extension failed'});
     }
 });
 
@@ -256,6 +266,6 @@ export const fetchUserComposite = createAsyncThunk<
             inventory: inventory.data,
         };
     } catch {
-        return rejectWithValue('Composite user fetch failed');
+        return rejectWithValue({message: 'Composite user fetch failed'});
     }
 });

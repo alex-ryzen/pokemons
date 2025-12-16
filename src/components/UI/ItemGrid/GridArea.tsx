@@ -39,7 +39,7 @@ export const GridArea: React.FC<GridAreaProps> = ({
     });
 
     const items = useAppSelector(
-        (state) => state.items.items.filter((i) => i.gridId === id),
+        (state) => state.inventory.items.filter((i) => i.gridId === id),
         shallowEqual
     );
 

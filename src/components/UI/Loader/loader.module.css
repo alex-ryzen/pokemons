@@ -1,0 +1,13 @@
+.lodaer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.loader-img {
+    display: block;
+    height: auto;
+    width: 100%;
+    image-rendering: pixelated;
+}

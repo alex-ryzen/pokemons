@@ -13,3 +13,8 @@
     flex-direction: column;
     gap: 8px;
 }
+
+.last-elem {
+    height: 2px;
+    opacity: 0;
+}

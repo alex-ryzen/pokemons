@@ -1,8 +1,27 @@
 
-.filter-container-wrapper {
-
-}
+.filter-container-wrapper {}
 
 .filter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
+.filter-block-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.filter-title {
+    font-family: 'Roboto';
+    font-weight: 700;
+    color: var(--secondary-color);
+    padding: 2px 4px;
+    border-radius: 2px;
+    background-color: var(--gray-100);
+}
+
+.filter-content-container {
+    padding: 4px 6px;
 }

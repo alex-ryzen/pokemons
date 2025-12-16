@@ -1,4 +1,4 @@
-import { useState, type FC } from "react";
+import React, { JSX, memo, useEffect, useRef, useState, type FC } from "react";
 import style from './homepage.module.css'
 import Accordion from "../../components/UI/Accordion/Accordion";
 import MyPokemons from "../../components/MyPokemons/MyPokemons";
@@ -6,17 +6,16 @@ import Garden from "../../components/Garden/Garden";
 
 
 type MidItem = {
-  key: string,
-  title: string;
-  content: React.ReactNode;
+    key: string,
+    title: string;
+    component: (() => JSX.Element) | FC;
 };
 
-const HomePage = () => {
-    const [openIdx, setOpenIdx] = useState<number | null>(null);
-    const miditems: MidItem[] = [
-        { key: "1" , title: "My Pokemons", content: <MyPokemons/>},
-        { key: "2" , title: "Garden", content: <Garden/> },
-        { key: "3" , title: "Hunt", content: 
+const MID_ITEMS: MidItem[] = [
+    { key: "section_1", title: "My Pokemons", component: MyPokemons },
+    { key: "section_2", title: "Garden", component: Garden },
+    {
+        key: "section_3", title: "Hunt", component: () =>
             <>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam magna velit, venenatis eget convallis ut, elementum non metus. Maecenas turpis neque, fermentum at congue ut, rhoncus eu erat. Integer ultricies a nisi et tincidunt. Donec commodo sapien eu nibh tempor, a sodales leo mollis. Integer sollicitudin enim suscipit odio fermentum, vel molestie urna semper. Mauris nisi lectus, feugiat id lacinia quis, placerat eu purus. Aliquam erat volutpat. Integer eu tellus in nibh condimentum maximus. Cras non leo quis sapien imperdiet sodales. Proin scelerisque feugiat nisl a pellentesque. Cras vitae porttitor quam. Donec imperdiet ex non neque pharetra commodo. Vivamus commodo at mauris eget ullamcorper. Duis pretium metus id diam convallis facilisis. Pellentesque sagittis justo ut purus tincidunt aliquet.
 
@@ -31,25 +30,32 @@ const HomePage = () => {
                 Suspendisse eget turpis pretium, auctor sapien eu, cursus risus. Fusce vel faucibus ante, a aliquet ipsum. Sed ac fringilla metus. Quisque finibus nunc blandit eleifend iaculis. Suspendisse eleifend erat quam, eu dignissim velit finibus quis. Vivamus consectetur pretium pharetra. Nullam nisl mauris, interdum vitae sapien in, ullamcorper sagittis neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
 
                 Nullam vehicula vulputate bibendum. Vestibulum feugiat, nisl eu sodales dapibus, odio velit lobortis odio, vel iaculis massa risus sit amet felis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam posuere consectetur dui eu ultrices. Praesent iaculis pellentesque lacinia. Aliquam eu viverra mauris. Aliquam vel est eleifend, rhoncus magna sit amet, scelerisque odio. Aenean auctor pharetra orci id viverra. Morbi rutrum dolor quis placerat dignissim. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur vitae pulvinar urna. Maecenas auctor tellus non tellus hendrerit lobortis. Integer vehicula iaculis ornare.
-            </> 
-        }
-    ];
+            </>
+    }
+];
 
-    return ( 
-        <div className={style['content-container']}>
-            {miditems.map((item, idx) => (
+const HomePage = memo(() => {
+    const [openIdx, setOpenIdx] = useState<number | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        console.log("ПЕРЕРИСОВКА HOME PAGE ,", containerRef.current?.clientHeight)
+    })
+    return (
+        <div ref={containerRef} className={style['content-container']}>
+            {MID_ITEMS.map((item, idx) => (
                 <Accordion
                     key={item.key}
                     isOpen={openIdx === idx}
                     title={item.title}
                     onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-                    sectionsCount={miditems.length}
+                    sectionsCount={MID_ITEMS.length}
+                    containerRef={containerRef}
                 >
-                    {item.content}
+                    {React.createElement(item.component)}
                 </Accordion>
-        ))}
+            ))}
         </div>
     );
-}
- 
+})
+
 export default HomePage;

@@ -1,7 +1,11 @@
-/*tabs-root*/
-.tabs-wrapper { 
+/* tabs-root */
+/* .tabs-wrapper { 
     position: relative;
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .tabs-container {
@@ -58,4 +62,112 @@
 .tabs-panel {
     min-height: 100px;
     overflow: auto;
+}
+
+.tab-panel-item {
+    min-width: 100%;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.swipe-viewport {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.swipe-track {
+    display: flex;
+    width: 100%;
+    will-change: transform;
+} */
+
+.tabs-wrapper { 
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.tabs-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.tabs-navbar {
+    position: relative;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    gap: 32px;
+    padding: 0 24px;
+    /* border-bottom: 1px solid var(--neutral-4); */
+}
+
+.tabs-navbar::after {
+    content: "";
+    position: absolute;
+    width: calc(100% - 48px);
+    bottom: 0;
+    left: 24px;
+    height: 1px;
+    background-color: var(--neutral-4, #eee);
+}
+
+.tab-btn {
+    font-family: "Roboto", sans-serif;
+    padding: 12px 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    transition: color 0.2s;
+    position: relative;
+    z-index: 2;
+}
+
+.tab-btn-active {
+    color: var(--secondary-color, #3178c6);
+}
+
+.tab-indicator {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--secondary-color, #3178c6);
+    pointer-events: none;
+    z-index: 3;
+    left: 0;
+}
+
+.swipe-viewport {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    touch-action: pan-y;
+}
+
+.swipe-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+}
+
+.tab-panel-item {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }

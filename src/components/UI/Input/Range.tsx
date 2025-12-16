@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './range.module.css';
 import { RangeData } from '../../../types/app';
+import Input from './Input';
 
 export type RangeProps = {
     value?: RangeData,
@@ -8,19 +9,19 @@ export type RangeProps = {
 }
 
 const Range: React.FC<RangeProps> = ({ value, onChange }) => {
-    
+
     const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value === '' ? '' : Number(e.target.value);
-        onChange({ 
+        onChange({
             name: value ? value.name : "",
-            max: value ? value.max : "", 
-            min: val 
+            max: value ? value.max : "",
+            min: val
         });
     };
 
     const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value === '' ? '' : Number(e.target.value);
-        onChange({ 
+        onChange({
             name: value ? value.name : "",
             max: val,
             min: value ? value.min : ""
@@ -30,19 +31,21 @@ const Range: React.FC<RangeProps> = ({ value, onChange }) => {
     return (
         <div className={styles.rangeWrapper}>
             <label className={styles.fieldLabel}>
-                От:
-                <input
-                    type="number"
+                от:
+                <Input 
+                    type='number'
                     value={value?.min}
+                    min={0}
                     onChange={handleMinChange}
-                    className={styles.rangeInput}
+                    className={styles.rangeInput} 
                 />
             </label>
             <label className={styles.fieldLabel}>
-                До:
-                <input
+                до:
+                <Input
                     type="number"
                     value={value?.max}
+                    max={999999999999}
                     onChange={handleMaxChange}
                     className={styles.rangeInput}
                 />

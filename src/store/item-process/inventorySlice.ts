@@ -1,40 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchShopItems, purchaseItem } from "../../services/api-actions";
-import { IItem, IShopItem } from "../../types/app";
-import { UniqueIdentifier } from "@dnd-kit/core";
+import { IItem } from "../../types/app";
 
-export type ItemCellPos = Pick<IItem, "cPosX" | "cPosY" | "gridId">;
+export type InvItemCellPos = Pick<IItem, "cPosX" | "cPosY" | "gridId">;
 
-export interface ItemState {
+export interface InvItemState {
     items: IItem[];
-    shopItems: IShopItem[];
     isLoading: boolean;
     error: string | null;
 }
 
-const initialState: ItemState = {
+const initialState: InvItemState = {
     items: [],
-    shopItems: [],
     isLoading: false,
     error: null,
 };
 
-export const itemSlice = createSlice({
-    name: "items",
+export const inventorySlice = createSlice({
+    name: "inventoryItems",
     initialState: initialState,
     reducers: {
-        setInventoryItems: (state, action: { payload: IItem[] }) => {
+        setInventoryItems: (state, action: PayloadAction<IItem[]>) => { // PayloadAction<IItem[]> or { payload: IItem[] }
             state.items = action.payload;
-        },
-        setShopItems: (state, action: { payload: IShopItem[] }) => {
-            state.shopItems = action.payload;
-        },
-        setItems: (state, action: PayloadAction<IItem[]>) => {
-            state.items = [...action.payload];
         },
         setPosition: (
             state,
-            action: PayloadAction<{ id: IItem["id"]; pos: ItemCellPos }>
+            action: PayloadAction<{ id: IItem["id"]; pos: InvItemCellPos }>
         ) => {
             if (!state.items) return;
             const currentItem = state.items.find((i) => i.id === action.payload.id);
@@ -71,22 +61,22 @@ export const itemSlice = createSlice({
             //     state.isLoading = false;
             //     //state.error = action.payload as string;
             // })
-            .addCase(fetchShopItems.pending, (state) => {
-                state.isLoading = true;
-            })
-            .addCase(fetchShopItems.fulfilled, (state, action) => {
-                state.isLoading = false;
-                //state.shopItems = action.payload;
-            })
-            .addCase(fetchShopItems.rejected, (state, action) => {
-                state.isLoading = false;
-                //state.error = action.payload as string;
-            })
-            .addCase(purchaseItem.fulfilled, (state) => {
-                // можно добавить обновление баланса извне или уведомление
-            });
+            // .addCase(fetchShopItems.pending, (state) => {
+            //     state.isLoading = true;
+            // })
+            // .addCase(fetchShopItems.fulfilled, (state, action) => {
+            //     state.isLoading = false;
+            //     //state.shopItems = action.payload;
+            // })
+            // .addCase(fetchShopItems.rejected, (state, action) => {
+            //     state.isLoading = false;
+            //     //state.error = action.payload as string;
+            // })
+            // .addCase(purchaseItem.fulfilled, (state) => {
+            //     // можно добавить обновление баланса извне или уведомление
+            // });
     },
 });
-export const { setShopItems, setItems, setPosition } = itemSlice.actions;
+export const { setInventoryItems, setPosition } = inventorySlice.actions;
 
-export default itemSlice.reducer;
+export default inventorySlice.reducer;

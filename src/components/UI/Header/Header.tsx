@@ -3,10 +3,14 @@ import BlockTitle from "../BlockTitle/BlockTitle";
 import Logo from "../LogoContainer/Logo";
 import { formatBalance } from "../../../utils/formatters";
 import { Link } from "react-router";
+import { useEffect } from "react";
 
 interface HeaderProps {}
 
 const Header = (headerProps: HeaderProps) => {
+        useEffect(() => {
+          console.log("Header render")
+        })
     return (
         <header className={`${styles["header"]} content-block`} id="header">
             <div className={styles["header-container"]}>

@@ -1,7 +1,12 @@
 .sort-container {
     font-size: 12px;
     display: flex;
-    align-items: center;
-    gap: 4px;
+    flex-direction: column;
+    gap: 2px;
     padding: 4px 12px;
+}
+
+.sort-label {
+    font-size: 10px;
+    color: #8d8d8d;
 }

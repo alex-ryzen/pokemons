@@ -11,6 +11,7 @@ export type TabConfig = {
 }
 
 export type ListedData = {
+    id?: string;
     name: string;
     label: string;
 }
@@ -22,6 +23,18 @@ export type ScrollOffset = { top: number; left: number };
  */
 
 //export type UserStatus = "idle" | "loading" | "succeeded" | "failed";
+
+export type RegisterData = { 
+    username: string; 
+    email: string;
+    password: string;
+    password_confirmation: string;
+};
+
+export type LoginData = { 
+    login: string; 
+    password: string 
+};
 
 export enum UserRoles {
     User = "user",
@@ -59,20 +72,31 @@ export type GridAreaData = {
   accepts?: GridTypes[];
 };
 
-
 /**
  * types/app.ts - Shop
  */
 
+export type SpecsAllTypes = {
+    size?: number,
+    power?: number,
+    smoothness?: number,
+    growth_time?: number,
+    max_harvest?: number,
+    soil_dryness?: number,
+    chance?: string,
+}
+
+export type ShopItemTypes = 'berry' | 'pokeball'
 export interface IShopItem {
-    id: UniqueIdentifier | string;
-    itemId: string,
-    title: string,
+    item_id: string, //p1
+    item_type: ShopItemTypes, //p2
+    category?: string,
+    name: string,
     price: number,
-    category: string,
-    description?: string,
     level?: number,
-    img?: string,
+    specs?: SpecsAllTypes,
+    description?: string,
+    image?: string,
 }
 
 /**
@@ -86,7 +110,7 @@ export interface IItem extends Partial<IShopItem> { //Pick<ShopItem, "title" | "
     cSize: number; // because height = width
     cPosX: number;
     cPosY: number;
-    img?: string;
+    image?: string;
 }
 
 export interface IGridItem extends IItem {
@@ -153,5 +177,5 @@ export type IPokemon = {
     income: number, // mps
     summary: number,
     age: number,
-    img: string,
+    image: string,
 }

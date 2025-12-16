@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import CheckboxList from "../Checkbox/CheckboxList";
 import Range from "../Input/Range";
 import styles from './filter.module.css'
-import { FilterArgs, FilterContent, FilterType, FilterTypes, isOfFilterType } from "../../../hooks/useFilter";
+import { FilterContent, FilterType, FilterTypes, FilterArgs } from "../../../hooks/useFilter";
 
 export interface FilterProps {
     filterContent: FilterArgs["content"];
@@ -22,20 +22,28 @@ const Filter: FC<FilterProps> = ({filterContent, setActiveValue}) => {
                         const filter = filterContent[filterName]
                         if (filter.type === FilterTypes.checkbox) {
                             return (
-                                <CheckboxList
-                                    key={idx}
-                                    defaultCheckboxes={ filter.value.default }
-                                    activeCheckboxes={ filter.value.active }
-                                    onChange={ setActiveValue.bind(null, filterName, FilterTypes.checkbox) }
-                                ></CheckboxList>
+                                <div key={idx} className={styles.filterBlockContainer}>
+                                    <h5 className={styles.filterTitle}>{filter.title}</h5>
+                                    <div className={styles.filterContentContainer}>
+                                        <CheckboxList
+                                            defaultCheckboxes={ filter.value.default }
+                                            activeCheckboxes={ filter.value.active }
+                                            onChange={ setActiveValue.bind(null, filterName, FilterTypes.checkbox) }
+                                        ></CheckboxList>
+                                    </div>
+                                </div>
                             )
                         } else if (filter.type === FilterTypes.range) {
                             return (
-                                <Range 
-                                    key={idx}
-                                    value={filter.value.active}
-                                    onChange={ setActiveValue.bind(null, filterName, FilterTypes.range)}
-                                ></Range>
+                                <div key={idx} className={styles.filterBlockContainer}>
+                                    <h5 className={styles.filterTitle}>{filter.title}</h5>
+                                    <div className={styles.filterContentContainer}>
+                                        <Range 
+                                            value={filter.value.active}
+                                            onChange={ setActiveValue.bind(null, filterName, FilterTypes.range)}
+                                        ></Range>
+                                    </div>
+                                </div>
                             )
                         }
                     }

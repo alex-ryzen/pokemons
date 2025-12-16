@@ -1,9 +1,9 @@
 .modal-overlay {
     position: fixed;
     inset: 0;
-    opacity: 0;
+    /* opacity: 0; */
     background: rgba(0, 0, 0, 0.3);
-    pointer-events: none;
+    /* pointer-events: none; */
     transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
@@ -11,10 +11,10 @@
     z-index: 1000;
 }
 .modal-overlay--open {
-    opacity: 1;
-    pointer-events: auto;
+    /* opacity: 1; */
+    /* pointer-events: auto; */
 }
-.modal-window {
+.modalWindow {
     display: flex;
     flex-direction: column;
     position: relative;
@@ -23,8 +23,8 @@
     background: var(--background-color);
     border-radius: 2px;
     box-shadow: 0 4px 32px rgba(0, 0, 0, 0.22);
-    animation: modalIn 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-    color: var(--dark-color)
+    /* animation: modalIn 0.32s cubic-bezier(0.4, 0, 0.2, 1); */
+    color: var(--dark-color);
 }
 .modal-header {
     padding: 16px 24px;
@@ -37,7 +37,7 @@
     align-items: center;
 }
 .modal-header-title {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 500;
     font-size: 16px;
     letter-spacing: 0;
@@ -66,7 +66,7 @@
     align-items: center;
 }
 
-@keyframes modalIn {
+/* @keyframes modalIn {
     0% {
         opacity: 0;
         transform: translateY(40px) scale(0.92);
@@ -75,4 +75,40 @@
         opacity: 1;
         transform: translateY(0) scale(1);
     }
+} */
+
+.mEnter {
+    opacity: 0;
+}
+.mEnter .modalWindow {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+}
+.mEnterActive {
+    opacity: 1;
+    transition: opacity 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mEnterActive .modalWindow {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: opacity 180ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mExit {
+    opacity: 1;
+}
+.mExit .modalWindow {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+.mExitActive {
+    opacity: 0;
+    transition: opacity 140ms cubic-bezier(0.4, 0, 1, 1);
+}
+.mExitActive .modalWindow {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    transition: opacity 140ms cubic-bezier(0.4, 0, 1, 1),
+        transform 140ms cubic-bezier(0.4, 0, 1, 1);
 }

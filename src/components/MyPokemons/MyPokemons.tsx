@@ -1,4 +1,3 @@
-import { FC, useId } from "react";
 import styles from "./myPokemons.module.css"
 import EntityCard, { EntityCardProps } from "../UI/EntityCard/EntityCard";
 import Modal from "../UI/Modal/Modal";
@@ -72,7 +71,7 @@ const initPokemonTabs: TabConfig[] = [
     }
 ]
 
-const MyPokemons: FC = () => {
+const MyPokemons = () => {
     const {isOpen, open, close, overlayRef} = useModal()
     const tabProps = useTabs(initPokemonTabs, "feed")
     const thumbnailModalTitle = `Управление покемоном ${initEntities[0].title}`

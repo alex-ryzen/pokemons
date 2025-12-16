@@ -7,17 +7,17 @@
   /* padding: 16px; */
 }
 .accordion--open {
-    flex: 1 1 0;
+  flex: 1 1 0;
 }
 .accordion-inner-wrapper {
-    position: relative;
-    overflow: hidden;
-    border-radius: inherit;
+  position: relative;
+  overflow: hidden;
+  border-radius: inherit;
 }
 
 .accordion-header-wrapper {
-    cursor: pointer;
-    padding: 16px;
+  cursor: pointer;
+  padding: 16px;
 }
 
 .accordion-header-container {
@@ -44,15 +44,15 @@
 
 .accordion-content-wrapper {
   position: relative;
-  height: 0;
+  overflow: hidden;
   transition: all 0.25s cubic-bezier(.25,1,.7,1);
 }
 
-.accordion-content-wrapper.content--open {
-  height: auto;
+.accordion--open .accordion-content-wrapper {
+  overflow: auto;
 }
 
-.accordion-content-wrapper.content--open::before {
+.accordion--open .accordion-content-wrapper::before {
   content: '';
   position: absolute;
   z-index: 101;
@@ -63,7 +63,7 @@
   background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255, 0) 100%);
 }
 
-.accordion-content-wrapper.content--open::after {
+.accordion--open .accordion-content-wrapper::after {
   content: '';
   position: absolute;
   z-index: 101;
@@ -78,19 +78,21 @@
   position: relative;
   padding: 8px 0;
   overflow: hidden;
-  height: 0;
+  height: auto;
   max-height: 0;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transition: all 0.25s cubic-bezier(.25,1,.7,1);
   padding: 8px 16px;
+  will-change: max-height;
 }
 
-.content--open .accordion-content {
+.accordion--open .accordion-content {
   /* max-height: 56vh; */
   overflow: auto;
-  height: 100%;
   opacity: 1;
+  visibility: visible;
   pointer-events: all;
 }
 
@@ -100,4 +102,27 @@
 
 .accordion-inner {
   background: transparent;
+  transition: opacity 180ms ease, transform 180ms ease;
+  will-change: opacity, transform;
 }
+
+.accEnter .accordion-inner {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.accEnterActive .accordion-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.accExit .accordion-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.accExitActive .accordion-inner {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+

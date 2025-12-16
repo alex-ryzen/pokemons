@@ -1,8 +1,9 @@
 import { FC } from "react";
 import Button from "../Button/Button";
-import Input from "../Input/Input";
+
 import styles from "./stats.module.css"
 import Characteristic, { CharacteristicProps } from "../Characteristic/Characteristic";
+import Input from "../Input/Input";
 
 
 interface StatsProps {
@@ -16,7 +17,9 @@ const Stats: FC<StatsProps> = ({stats, img}) => {
             <div className={styles.statsContainer}>
                 <div className={styles.statPokeContainer}>
                     <img className={styles.statPokeImg} src={img ?? '/images/placeholders/thumbnail.webp'} alt="" />
-                    <Button onClick={() => {console.log("D E L E T E D")}}>Удалить покемона</Button>
+                    <Button onClick={() => {console.log("D E L E T E D")}}>
+                        <span>Удалить покемона</span> 
+                    </Button>
                 </div>
                 <div className={styles.statListContainer}>
                     <ul className={styles.statList}>
@@ -27,8 +30,10 @@ const Stats: FC<StatsProps> = ({stats, img}) => {
                         )}
                     </ul>
                     <div className={styles.statInpContainer}>
-                        <Input placeholder="Псевдоним покемона"></Input>
-                        <Button onClick={() => {console.log("S A V E D")}} innerStyle={{padding: "4px 16px "}}>Сохранить</Button>
+                        <Input type="text" placeholder="Псевдоним покемона"></Input>
+                        <Button onClick={() => {console.log("S A V E D")}} style={{padding: "0px 16px "}}>
+                            <span>Сохранить</span> 
+                        </Button>
                     </div>      
                 </div>
             </div>

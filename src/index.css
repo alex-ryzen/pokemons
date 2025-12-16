@@ -1,5 +1,4 @@
-@import url('/fonts/Inter/stylesheet.css');
-@import url('/fonts/Roboto/stylesheet.css');
+@import "fonts.css";
 
 :root {
   --primary-color: #FFCC01;

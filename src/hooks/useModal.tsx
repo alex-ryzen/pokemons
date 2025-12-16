@@ -14,8 +14,8 @@ export function useModal() {
     );
 
     useEffect(() => {
-        const overlay = overlayRef.current;
-        const handler = () => close();
+        // const overlay = overlayRef.current;
+        // const handler = () => close();
         const keyDown = (e: KeyboardEvent) => (e.key === "Escape" && isOpen ? close() : null);
         
         if (isOpen) {
@@ -23,12 +23,13 @@ export function useModal() {
             window.addEventListener("keydown", keyDown);
         } else {
             document.body.style.overflow = "";
-            overlay?.addEventListener("transitionend", handler);
+            window.removeEventListener("keydown", keyDown);
+            // overlay?.addEventListener("transitionend", handler);
         }
         return () => {
             document.body.style.overflow = "";
             window.removeEventListener("keydown", keyDown);
-            overlay?.removeEventListener("transitionend", handler);
+            // overlay?.removeEventListener("transitionend", handler);
         };
     }, [isOpen, open, close]);
 

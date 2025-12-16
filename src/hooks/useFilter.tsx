@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, createContext, FC, ReactNode, Provider } from "react";
 import { ListedData, RangeData } from "../types/app";
-import { FilterProps } from "../components/UI/Filter/Filter";
 
+// ----- helpers -----
 export type FilterContentValueType<T_default, T_active> = {
     default: T_default;
     active?: T_active;
@@ -15,16 +15,19 @@ export type FilterType = (typeof FilterTypes)[keyof typeof FilterTypes]; // ??? 
 
 export type FilterContent =
     | {
-          type: typeof FilterTypes.checkbox;
-          value: FilterContentValueType<ListedData[], Set<string>>;
+        title: string;
+        type: typeof FilterTypes.checkbox;
+        value: FilterContentValueType<ListedData[], ListedData[]>; // Set<string>
       }
     | {
-          type: typeof FilterTypes.radio;
-          value: FilterContentValueType<ListedData[], Set<string>>;
+        title: string;
+        type: typeof FilterTypes.radio;
+        value: FilterContentValueType<ListedData[], ListedData[]>; // Set<string>
       }
     | {
-          type: typeof FilterTypes.range;
-          value: FilterContentValueType<RangeData, RangeData>;
+        title: string;
+        type: typeof FilterTypes.range;
+        value: FilterContentValueType<RangeData, RangeData>;
       };
 
 export function isOfFilterType<T extends FilterContent["type"]>(
@@ -33,19 +36,25 @@ export function isOfFilterType<T extends FilterContent["type"]>(
 ): obj is Extract<FilterContent, { type: T }> {
     return obj.type === type;
 }
+// ----- ------- -----
 
+export interface FilterOutType {
+    filterStr: string;
+    filterContent: Record<string, FilterContent>;
+    setActiveValue: (filterName: string, valType: FilterType, value: FilterContent["value"]["active"]) => void;
+};
 export interface FilterArgs {
-    content: Record<string, FilterContent> //or if export type FilterTypesValues = [string[], {from: number, to: number}, string[]] -> value: FilterTypesValues[number]
-} // or [key: string]FilterContent
+    content: Record<string, FilterContent>; //or if export type FilterTypesValues = [string[], {from: number, to: number}, string[]] -> value: FilterTypesValues[number] 
+    initialString: string;
+};// or [key: string]FilterContent
 
-export function useFilter({content}: FilterArgs) {
-    
-    const [filterStr, setFilterStr] = useState<string>("")
+export function useFilter( { content, initialString }: FilterArgs ): FilterOutType {
+    if (!content) return {} as FilterOutType;
+    const [filterStr, setFilterStr] = useState<string>(initialString)
     const [filterContent, setFilterContent] = useState<FilterArgs["content"]>(content);
     
     const serializeFilterData = useCallback((data: FilterArgs["content"]) => {
         const filterStr: string[] = [];
-        console.log(data)
         Object.entries(data).forEach(([filterName, filterValue]) => {
             if (filterValue.value.active) {
                 let enumStr = "";
@@ -53,11 +62,12 @@ export function useFilter({content}: FilterArgs) {
                     filterValue.type === FilterTypes.checkbox ||
                     filterValue.type === FilterTypes.radio
                 ) {
-                    enumStr = Array.from(filterValue.value.active).join(",");
+                    const names = filterValue.value.active.map(i => i.name)
+                    enumStr = names.join(",");
                 } else if (filterValue.type === FilterTypes.range) {
-                    enumStr = `${filterValue.value.active.min}-${filterValue.value.active.max}`;
+                    enumStr = `${filterValue.value.active.min ? filterValue.value.active.min : "min"}_${filterValue.value.active.max ? filterValue.value.active.max : "max"}`;
                 }
-                filterStr.push(`${filterName}[${filterValue.type}]:${enumStr}`);
+                filterStr.push(`${filterName}[${filterValue.type}]:${enumStr.length > 0 ? enumStr : null}`);
             } else {
                 return;
             }
@@ -95,9 +105,20 @@ export function useFilter({content}: FilterArgs) {
         setFilterStr(serializeFilterData(filterContent));
     }, [filterContent])
 
-    return {
+    const outputValue: FilterOutType = {
         filterStr,
         filterContent,
         setActiveValue,
     };
+    return outputValue;
 }
+
+
+// import { useContext } from "react"
+// import { FilterContext } from "../contexts/FilterContext"
+
+// export const useFilter = () => {
+//     const context = useContext(FilterContext)
+//     if (!context) throw new Error("useFilter must be used within a FilterProvider");
+//     return context;
+// }

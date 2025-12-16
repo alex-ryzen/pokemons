@@ -1,6 +1,7 @@
 import { createRef, useEffect, useRef } from "react";
 import Button from "../Button/Button";
 import styles from './itemCard.module.css'
+import { resolveImageUrl } from "../../../utils/functions";
 
 
 export interface ItemCardProps {
@@ -21,14 +22,16 @@ const ItemCard = ({title, description, img, buttonTxt}: ItemCardProps) => {
             <div className={styles.itemCardContainer}>
                 <div className={styles.itemCardContent}>
                     <div className={styles.contentImgContainer}>
-                        <img className={styles.contentImg} src={img ?? '/images/placeholders/thumbnail.webp'} alt="" />
+                        <img className={styles.contentImg} src={resolveImageUrl(img) ?? '/images/placeholders/thumbnail.webp'} alt="image" />
                     </div>
                     <div className={styles.descriptionContent}>
                         <h4 className={styles.title}>{title}</h4>
                         <p className={styles.description}>{description}</p>
                     </div>
                 </div>
-                <Button ref={btnRef} onClick={() => console.log("BUTTON CLICKED!")}>{buttonTxt}</Button> 
+                <Button ref={btnRef} onClick={() => console.log("BUTTON CLICKED!")}>
+                    <span>{buttonTxt}</span>
+                </Button> 
             </div>
         </article>
     );

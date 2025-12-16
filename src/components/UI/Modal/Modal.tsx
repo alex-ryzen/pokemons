@@ -1,23 +1,22 @@
 import {
     FC,
-    ForwardedRef,
-    forwardRef,
     ReactNode,
-    useEffect,
-    useRef,
-    useState,
+    RefObject,
 } from "react";
 import ReactDOM from "react-dom";
 import styles from "./modal.module.css";
 import Button from "../Button/Button";
+import { CSSTransition } from "react-transition-group";
 
 interface ModalProps {
     open: boolean;
     onClose: () => void;
-    overlayRef: ForwardedRef<HTMLDivElement | null>;
+    overlayRef: RefObject<HTMLDivElement | null>;
     children: ReactNode;
     title?: string;
 }
+
+const TIMEOUT = 180
 
 const Modal: FC<ModalProps> = ({
     open,
@@ -26,23 +25,32 @@ const Modal: FC<ModalProps> = ({
     children,
     title
 }) => {
-
-    if (!open) return null;
-    else
-        return ReactDOM.createPortal(
+    return ReactDOM.createPortal(
+        <CSSTransition
+            in={open}
+            timeout={TIMEOUT}
+            nodeRef={overlayRef}
+            mountOnEnter
+            unmountOnExit
+            classNames={{
+                enter: styles.mEnter,
+                enterActive: styles.mEnterActive,
+                exit: styles.mExit,
+                exitActive: styles.mExitActive,
+            }}
+        >
             <div
                 ref={overlayRef}
-                className={`${styles.modalOverlay} ${
-                    open ? styles.modalOverlayOpen : ""
-                }`}
-                onClick={onClose}
+                className={`${styles.modalOverlay}`} //${open ? styles.modalOverlayOpen : ""}
+                onMouseDown={onClose}
                 aria-modal="true"
                 tabIndex={-1}
             >
-                <dialog
+                <div
+                    role="dialog"
                     style={{ width: 572 }}
                     className={styles.modalWindow}
-                    onClick={(e) => e.stopPropagation()}
+                    onMouseDown={(e) => e.stopPropagation()}
                     tabIndex={0}
                 >
                     <div className={styles.modalHeader}>
@@ -72,12 +80,15 @@ const Modal: FC<ModalProps> = ({
                     </div>
                     <div className={styles.modalFooter}>
                         <div className={styles.modalFooterContainer}>
-                            <Button onClick={onClose} innerStyle={{padding: "4px 16px "}}>Закрыть</Button>
+                            <Button onClick={onClose}>
+                                <span style={{ padding: "4px 16px " }}>Закрыть</span>
+                            </Button>
                         </div>
                     </div>
-                </dialog>
-            </div>,
-            document.body
-        );
+                </div>
+            </div>
+        </CSSTransition>,
+        document.body
+    );
 };
 export default Modal;

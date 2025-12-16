@@ -8,15 +8,13 @@ export interface CheckboxProps extends ListedData {
 }
 const Checkbox: FC<CheckboxProps> = memo(({name, label, isChecked, onChange}) => {
     return ( 
-        <div className={styles.checkboxWrapper}>
-            <label htmlFor={name}>
-                <input type="checkbox" name={name} checked={isChecked} onChange={onChange} className={styles.checkboxInput} />
-                <div className={styles.checkboxContainer}>
-                    <div className={styles.checkboxCustomBox}></div>
-                    <span>{label}</span>
-                </div>
+        <li className={styles.checkboxWrapper}>
+            <label htmlFor={name} className={styles.checkbox}>
+                <input type="checkbox" id={name} name={name} checked={isChecked} onChange={onChange} className={styles.checkboxInput} />
+                <span className={styles.checkmark}></span>
+                {label}
             </label>
-        </div>
+        </li>
     );
 });
  

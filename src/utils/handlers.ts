@@ -2,28 +2,11 @@ import { RefObject, Ref } from "react";
 import { DropArea, IGridItem } from "../types/app";
 import { GRID_CELL_H, GRID_CELL_W } from "../consts";
 
-// export type Size = {
-//   // any w and h: absolute or cell
-//   h: number;
-//   w: number;
-// };
-
-// export type Coordinates = {
-//   // any x and y: absolute or cell
-//   x: number;
-//   y: number;
-// };
-
-// export type DropAreaLocal = {
-//   startPos: Coordinates;
-//   endPos: Coordinates;
-// };
-
 /**
- * Объединяет несколько React refs (мутабельные объекты или колбэки) в один колбэк-ref.
+ * Merges batch of React Refs into single callback-ref
  *
- * @param refs Массив ref-ов для объединения.
- * @returns Единый колбэк-ref, который присваивает значение всем переданным ref-ам.
+ * @param refs ref array for merging;
+ * @returns single callback-ref, which assings a value to all passed ref;
  */
 export function mergeRefs<T>(...refs: (Ref<T> | undefined | null)[]) {
     return (value: T | null) => {
@@ -110,3 +93,20 @@ export class ItemGridFuncs {
 }
 
 // console.log(`cellX >= dropArea.startPos.x ${cellX}>=${dropArea.startPos.x} ${cellX >= dropArea.startPos.x}  \ncellX <= dropArea.endPos.x ${cellX} <= ${dropArea.endPos.x} ${cellX <= dropArea.endPos.x} \ncellY >= dropArea.startPos.y ${cellY} >= ${dropArea.startPos.y} ${cellY >= dropArea.startPos.y} \ncellY <= dropArea.endPos.y ${cellY} <= ${dropArea.endPos.y} ${cellY <= dropArea.endPos.y}`)
+
+// export type Size = {
+//   // any w and h: absolute or cell
+//   h: number;
+//   w: number;
+// };
+
+// export type Coordinates = {
+//   // any x and y: absolute or cell
+//   x: number;
+//   y: number;
+// };
+
+// export type DropAreaLocal = {
+//   startPos: Coordinates;
+//   endPos: Coordinates;
+// };

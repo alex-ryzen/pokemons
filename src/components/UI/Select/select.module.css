@@ -1,208 +1,83 @@
-.select {
+.select-wrapper {
     position: relative;
     font-family: Roboto, Arial, sans-serif;
     user-select: none;
-    padding: 0 12px;
-}
-
-.select-control {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
     border: 1px solid var(--border-color);
-    border-radius: 2px;
     background: #fff;
+    border-radius: 2px;
 }
 
-.select-control:focus {
+.select {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.select-bar {
+    cursor: pointer;
+    padding: 2px 4px;
+}
+
+.select-bar:focus {
     outline: 2px solid #2a8cff;
     outline-offset: 0;
 }
 
-.select-bar-wrapper {
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.select-icon-wrapper {
-    padding: 0 4px;
-}
-
-.select-icon {
-    padding: 4px;
-}
-
-.select-bar-wrapper {
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.select-bar {
-    flex: 1;
-    min-height: 32px;
-    padding: 4px;
-}
-
-.select-bar-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 4px;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-.select-bar-option {
-    font-weight: 400;
-    background-color: var(--neutral-3);
-    border: 1px solid var(--neutral-4);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 4px 2px 8px;
-    border-radius: 4px;
-    transition: 0.3 ease all;
-}
-
-.select-bar-option:hover {
-    opacity: 0.9;
-}
-
-.sbo-text {
-    font-size: 12px;
-    line-height: 20px;
-    color: #000000D9;
-}
-
-.sbo-close-btn {
-    min-height: 10px;
-    min-width: 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-}
-
-.sbo-close-btn-icon {
-    width: 8px;
-    height: 8px;
-    display: block;
-    fill: none;
-}
-
-.sbo-close-btn-icon-path {
-    fill: #00000073;
-}
-
-/* dropdown styles */
 .select-dropdown {
     position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    right: 0;
-    z-index: 1000;
+    top: 4px;
+    left: -2px;
+    width: 100%;
+    z-index: 1100;
     border: 1px solid var(--border-color);
     background: #fff;
-    border-radius: 6px;
+    border-radius: 2px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
 }
 
-.select-dropdown-container {
-    padding: 6px;
-    max-height: 240px;
-    overflow-y: auto;
+.option-container {
+    position: relative;
 }
 
-.options-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.option-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.option-item:hover {
-    background: #f5faff;
-}
-
-.option-selected {
-    background: #e6f4ff;
-}
-
-.option-label {
-    font-size: 14px;
-    color: #222;
-}
-
-.option-checkbox {
-    pointer-events: none;
-    margin-right: 6px;
-}
-
-/* .select-bar-wrapper {
-    display: block;
-    padding: 0 12px;
-}
-
-.select-bar {
-    font-family: "Roboto", sans-serif;
-    width: 100%;
+.option {
     padding: 4px;
-    border-radius: 2px;
-    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease-in;
 }
 
-.select-bar-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 4px;
+.option[data-selected=true] {
+    color: var(--secondary-active);
 }
 
-.select-bar-option {
-    font-weight: 400;
-    background-color: var(--neutral-3);
-    border: 1px solid var(--neutral-4);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 4px 2px 8px;
+.option:hover {
+    padding: 4px 8px;
+    background: #eaeaea;
 }
 
-.sbo-text {
-    font-size: 12px;
-    line-height: 20px;
-    color: #000000D9;
+.ddLayer {
+    position: relative;
+    z-index: 1000;
 }
 
-.sbo-close-btn {
-    min-height: 10px;
-    min-width: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.ddEnter {
+    opacity: 0;
+    transform: translateY(-4px);
 }
 
-.sbo-close-btn-icon {
-    fill: none;
+.ddEnterActive {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 180ms ease, transform 180ms ease;
 }
 
-.sbo-close-btn-icon-path {
-    fill: #00000073;
+.ddExit {
+    opacity: 1;
+    transform: translateY(0);
 }
-*/
 
-/* select dropdown styles */
+.ddExitActive {
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 180ms ease, transform 180ms ease;
+}

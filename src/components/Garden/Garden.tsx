@@ -1,8 +1,9 @@
 import { GridArea } from "../UI/ItemGrid/GridArea";
-import { useGrid } from "../../hooks/useGrid";
+import { useGridActions, useGridState } from "../../hooks/useGrid";
 
 const Garden = () => {
-    const { registerGrid, activeItem, dropArea } = useGrid();
+    const { registerGrid } = useGridActions();
+    const { activeItem, dropArea } = useGridState();
     return ( 
         <div>
             <GridArea

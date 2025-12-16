@@ -1,10 +1,11 @@
 import type { Action, ThunkAction } from '@reduxjs/toolkit'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { createAPI } from '../services/api'
+import { createAPI } from '../services/api.tsx'
 
 import userReducer from './user-process/userSlice'
 import pokemonReducer from './pokemon-process/pokemonSlice'
-import itemReducer from './item-process/itemSlice'
+import inventoryReducer from './item-process/inventorySlice'
+import shopReducer from './item-process/shopSlice'
 
 // api init
 
@@ -12,7 +13,9 @@ const api = createAPI()
 
 export const rootReducer = combineReducers({
     user: userReducer,
-    items: itemReducer,
+    inventory: inventoryReducer,
+    shop: shopReducer,
+    //garden: gardenReducer,
     pokemons: pokemonReducer,
 })
 
