@@ -11,7 +11,7 @@ interface SideBlockProps {
 const SideBlock = ({titleText, children}: SideBlockProps) => {
     return ( 
         <aside className={`${styles['aside-block']} content-block`}>
-            {titleText && <BlockTitle text={titleText}></BlockTitle>}
+            {titleText && <BlockTitle>{titleText}</BlockTitle>}
             {children}
         </aside>
     );

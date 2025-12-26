@@ -4,19 +4,23 @@ import Logo from "../LogoContainer/Logo";
 import { formatBalance } from "../../../utils/formatters";
 import { Link } from "react-router";
 import { useEffect } from "react";
+import { useAppSelector } from "../../../hooks";
+import { RouteNames } from "../../../router/routes";
 
-interface HeaderProps {}
+interface HeaderProps { }
 
 const Header = (headerProps: HeaderProps) => {
-        useEffect(() => {
-          console.log("Header render")
-        })
+    const { user, player, isAuth } = useAppSelector(state => state.user)
+    useEffect(() => {
+        console.log("Header render")
+    })
     return (
         <header className={`${styles["header"]} content-block`} id="header">
             <div className={styles["header-container"]}>
                 <Logo />
                 <div className={styles["user-container"]}>
-                    <Link title="Login" className={styles["user-profile"]} to="/auth">
+                    {isAuth && <h3 className={styles.userProfileName}>{`Hello, ${user?.username}`}</h3>}
+                    <Link title="Login" className={styles["user-profile"]} to={isAuth ? RouteNames.PROFILE : RouteNames.AUTH}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="32"
@@ -34,6 +38,7 @@ const Header = (headerProps: HeaderProps) => {
                             <circle cx="12" cy="12" r="10" />
                         </svg>
                     </Link>
+
                     <div className={styles["balance-container"]}>
                         <img
                             src={"./images/icon/pokecoin.png"}

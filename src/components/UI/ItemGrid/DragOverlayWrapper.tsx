@@ -4,6 +4,7 @@ import { CELL_SIZE, GRID_GAP } from "../../../consts";
 import { useGridState } from "../../../hooks/useGrid";
 import { useEffect } from "react";
 
+
 export const DragOverlayWrapper = () => {
     const { activeItem } = useGridState();
     useEffect(() => {
@@ -17,7 +18,8 @@ export const DragOverlayWrapper = () => {
         <DragOverlay>
             {activeItem ? (
                 <GridItem
-                    text={`Move ${activeItem.id}`}
+                    // text={`Move ${activeItem.id}`}
+                    img={activeItem.image}
                     style={{
                         width:
                             activeItem.cSize * (CELL_SIZE + GRID_GAP) -
@@ -25,8 +27,9 @@ export const DragOverlayWrapper = () => {
                         height:
                             activeItem.cSize * (CELL_SIZE + GRID_GAP) -
                             GRID_GAP,
-                        backgroundColor: "rgba(63, 81, 181, 0.8)",
-                        color: "white",
+                        // backgroundColor: "rgba(63, 81, 181, 0.8)",
+                        // color: "white",
+                        opacity: 0.7,
                         boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
                         cursor: "grab",
                     }}

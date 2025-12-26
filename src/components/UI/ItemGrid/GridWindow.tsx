@@ -49,7 +49,7 @@ const GridWindow = forwardRef<GridWindowHandle, GridWindowProps>(
         const [isPanning, setIsPanning] = useState(false);
 
         const rafId = useRef<number | null>(null);
-        const lastTime = useRef<number>(0);
+        //const lastTime = useRef<number>(0);
         const velocity = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
         const history = useRef<Array<{ x: number; y: number; time: number }>>(

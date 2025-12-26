@@ -1,9 +1,59 @@
 import React, { JSX, memo, useEffect, useRef, useState, type FC } from "react";
-import style from './homepage.module.css'
+import styles from './homepage.module.css'
 import Accordion from "../../components/UI/Accordion/Accordion";
 import MyPokemons from "../../components/MyPokemons/MyPokemons";
 import Garden from "../../components/Garden/Garden";
+import { useAppDispatch } from "../../hooks";
+import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { useGridActions } from "../../hooks/useGrid";
+import { setInventoryItems } from "../../store/item-process/inventorySlice";
+import { DragOverlayWrapper } from "../../components/UI/ItemGrid/DragOverlayWrapper";
+import Inventory from "../../components/Inventory/Inventory";
+import Shop from "../../components/Shop/Shop";
+import { IItem } from "../../types/app";
 
+const initItems: IItem[] = [
+    {
+        id: "item1",
+        itemId: "item1",
+        gridId: "inv",
+        category: "berry",
+        cSize: 2,
+        cPosX: 3,
+        cPosY: 3,
+        image: "/images/items/d3c0698fdebee1e1c412fdd15288a696c106dd6e.png",
+    },
+    {
+        id: "item2",
+        itemId: "item2",
+        gridId: "inv",
+        category: "pokeball",
+        cSize: 1,
+        cPosX: 0,
+        cPosY: 0,
+        image: "/images/items/2f7faec4d1353f1810511eb434ea4b2981205bf6.png",
+    },
+    {
+        id: "item3",
+        itemId: "item3",
+        gridId: "inv",
+        category: "pokeball",
+        cSize: 1,
+        cPosX: 1,
+        cPosY: 2,
+        image: "/images/items/1c8e6d145c9ef9b8ec6a860ea8bf65c115fb1539.png",
+    },
+    {
+        id: "item4",
+        itemId: "item4",
+        gridId: "grdn",
+        category: "pokeball",
+        cSize: 1,
+        cPosX: 3,
+        cPosY: 4,
+        image: "/images/items/d3c0698fdebee1e1c412fdd15288a696c106dd6e.png",
+    },
+];
 
 type MidItem = {
     key: string,
@@ -37,24 +87,74 @@ const MID_ITEMS: MidItem[] = [
 const HomePage = memo(() => {
     const [openIdx, setOpenIdx] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const dispatch = useAppDispatch();
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: { distance: 5 },
+        })
+    );
+    const {
+        handleDragStart,
+        handleDragMove,
+        handleDragEnd,
+        handleDragCancel,
+    } = useGridActions();
+
+    useEffect(() => {
+        dispatch(setInventoryItems(initItems));
+    }, []);
+
     useEffect(() => {
         console.log("ПЕРЕРИСОВКА HOME PAGE ,", containerRef.current?.clientHeight)
     })
     return (
-        <div ref={containerRef} className={style['content-container']}>
-            {MID_ITEMS.map((item, idx) => (
-                <Accordion
-                    key={item.key}
-                    isOpen={openIdx === idx}
-                    title={item.title}
-                    onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-                    sectionsCount={MID_ITEMS.length}
-                    containerRef={containerRef}
+        <DndContext
+            sensors={sensors}
+            onDragStart={handleDragStart}
+            onDragMove={handleDragMove}
+            onDragEnd={handleDragEnd}
+            onDragCancel={handleDragCancel}
+            autoScroll={false}
+        >
+            <main className={`${styles["content"]}`}>
+                <aside
+                    className={`${styles["content-aside"]} content-block`}
+                    style={{ order: 0 }}
                 >
-                    {React.createElement(item.component)}
-                </Accordion>
-            ))}
-        </div>
+                    <div className={styles.asideContentContainer}>
+                        <Inventory></Inventory>
+                    </div>
+                </aside>
+                <div
+                    className={styles["content-wrapper"]}
+                    style={{ order: 1 }}
+                >
+                    <div ref={containerRef} className={styles['content-container']}>
+                        {MID_ITEMS.map((item, idx) => (
+                            <Accordion
+                                key={item.key}
+                                isOpen={openIdx === idx}
+                                title={item.title}
+                                onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
+                                sectionsCount={MID_ITEMS.length}
+                                containerRef={containerRef}
+                            >
+                                {React.createElement(item.component)}
+                            </Accordion>
+                        ))}
+                    </div>
+                </div>
+                <aside
+                    className={`${styles["content-aside"]} content-block`}
+                    style={{ order: 2 }}
+                >
+                    <div className={styles.asideContentContainer}>
+                        <Shop></Shop>
+                    </div>
+                </aside>
+            </main>
+            <DragOverlayWrapper />
+        </DndContext>
     );
 })
 

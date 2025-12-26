@@ -14,7 +14,6 @@ import {
     DragStartEvent,
     DragMoveEvent,
     DragEndEvent,
-    DragCancelEvent,
 } from "@dnd-kit/core";
 
 import { ItemGridFuncs as IGF } from "../utils/handlers";

@@ -1,15 +1,27 @@
 import type { Action, ThunkAction } from '@reduxjs/toolkit'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { createAPI } from '../services/api.tsx'
+import { createAPI, injectDispatch } from '../services/api.tsx'
+import createSagaMiddleware from 'redux-saga'
 
 import userReducer from './user-process/userSlice'
 import pokemonReducer from './pokemon-process/pokemonSlice'
 import inventoryReducer from './item-process/inventorySlice'
 import shopReducer from './item-process/shopSlice'
+import { rootSaga } from './root-saga.ts'
 
 // api init
 
 const api = createAPI()
+
+// saga middleware init
+
+const sagaMiddleware = createSagaMiddleware({
+    context: {
+        api: api
+    }
+})
+
+// root reducer
 
 export const rootReducer = combineReducers({
     user: userReducer,
@@ -26,12 +38,16 @@ export const store = configureStore({
             thunk: {
                 extraArgument: api
             }
-        })
+        }).concat(sagaMiddleware)
 })  
+
+sagaMiddleware.run(rootSaga)
 
 export type AppStore = typeof store
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
+
+injectDispatch(store.dispatch)
 
 export type AppThunk<ThunkReturnType = void> = ThunkAction< // Define a reusable type describing thunk functions
   ThunkReturnType,

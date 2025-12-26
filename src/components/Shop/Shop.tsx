@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import BlockTitle from '../UI/BlockTitle/BlockTitle';
 import { ItemCardProps } from '../UI/ItemCard/ItemCard';
 import styles from './shop.module.css'
@@ -10,13 +10,11 @@ import Sort from '../UI/Sort/Sort';
 import FilterBar from '../UI/Filter/FilterBar';
 import { IShopItem, ListedData } from '../../types/app';
 import Button from '../UI/Button/Button';
-import { resetShopItems } from '../../store/item-process/shopSlice';
 import { useObserver } from '../../hooks/useObserver';
 import ItemList from '../UI/ItemList/ItemList';
 import { returnByKey } from '../../utils/functions';
-import { ASIDE_CONTENT_PADDING, GENERAL_PADDING } from '../../consts';
 
-export const shopFilter: FilterArgs['content'] = {
+const shopFilter: FilterArgs['content'] = {
     product: {
         title: "Тип товара",
         type: "checkbox",
@@ -45,27 +43,6 @@ const shopSortOptions: Array<ListedData> = [
     {id: "shopsort4", name: "price-DESC", label: "Цена - убыв."}, 
     {id: "shopsort5", name: "level-ASC", label: "Уровень - возр."},
     {id: "shopsort6", name: "level-DESC", label: "Уровень - убыв."},
-]
-
-const initShopItems: ItemCardProps[] =  [
-    {
-        title: "Ягода 1 уровня",
-        description: "Накорми ей покемона для увеличения веса на 0.1 кг",
-        buttonTxt: "Купить за 1000",
-        img: "/images/items/d3c0698fdebee1e1c412fdd15288a696c106dd6e.png", 
-    },
-    {
-        title: "Покеболл 1 уровня",
-        description: "Во время охоты ловит покемона с шансом 7%",
-        buttonTxt: "Купить за 1000",
-        img: "/images/items/1c8e6d145c9ef9b8ec6a860ea8bf65c115fb1539.png",
-    },
-    {
-        title: "Покеболл 2 уровня",
-        description: "Во время охоты ловит покемона с шансом 15%",
-        buttonTxt: "Купить за 1000",
-        img: "/images/items/2f7faec4d1353f1810511eb434ea4b2981205bf6.png",
-    }
 ]
 
 /**
@@ -119,17 +96,23 @@ const Shop = memo(() => {
             sort: sort,
             search: undefined,
         }
-        dispatch(fetchShopItems(qdata));
-        if (!applied) setApplied(true);
+        if (!shop.isLoading) {
+            dispatch(fetchShopItems(qdata));
+        }
     }
 
     useEffect(() => {
         fetchSI();
     }, [page])
 
-    useEffect(() => {
-        fetchSI();
-    }, [])
+    const handleApplyClick = useCallback(() => {
+        if (page !== 0) { 
+            setPage(0);
+        } else {
+            fetchSI();
+            setApplied(true);
+        } 
+    }, [limit, page, filter, sort])
 
     return ( 
         <div className={styles.shopWrapper}>
@@ -166,7 +149,7 @@ const Shop = memo(() => {
                         wrapperStyles={{maxHeight: (blockRef.current?.clientHeight || 0)}} // - 2 * GENERAL_PADDING
                     ></ItemList>
                 </div>
-                {!applied && (<Button onClick={fetchSI} className={styles.applyButton}>
+                {!applied && (<Button onClick={handleApplyClick} className={styles.applyButton}>
                     Применить
                 </Button>)}
             </div>
@@ -188,3 +171,24 @@ export default Shop;
 //         berry: (power: number, maxco: number) => `Накорми ей покемона для увеличения веса на ${power / 10} кг в макс. кол-ве ${maxco}`,
 //     }
 // }
+
+// const initShopItems: ItemCardProps[] =  [
+//     {
+//         title: "Ягода 1 уровня",
+//         description: "Накорми ей покемона для увеличения веса на 0.1 кг",
+//         buttonTxt: "Купить за 1000",
+//         img: "/images/items/d3c0698fdebee1e1c412fdd15288a696c106dd6e.png", 
+//     },
+//     {
+//         title: "Покеболл 1 уровня",
+//         description: "Во время охоты ловит покемона с шансом 7%",
+//         buttonTxt: "Купить за 1000",
+//         img: "/images/items/1c8e6d145c9ef9b8ec6a860ea8bf65c115fb1539.png",
+//     },
+//     {
+//         title: "Покеболл 2 уровня",
+//         description: "Во время охоты ловит покемона с шансом 15%",
+//         buttonTxt: "Купить за 1000",
+//         img: "/images/items/2f7faec4d1353f1810511eb434ea4b2981205bf6.png",
+//     }
+// ]

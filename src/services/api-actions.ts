@@ -6,6 +6,13 @@ import { AuthResponse } from './api.tsx';
 import { AppDispatch, RootState } from '../store/store';
 import { ShopQueryParams } from '../components/Shop/Shop';
 import { sleep } from '../utils/functions';
+import { logout } from '../store/user-process/userSlice.ts';
+
+
+export type ErrorResponse = {
+    message?: string;
+    errors?: { path: string; message: string; code?: string }[];
+};
 
 interface ThunkApiConfig {
     dispatch: AppDispatch;
@@ -13,11 +20,6 @@ interface ThunkApiConfig {
     extra: AxiosInstance;
     rejectValue: ErrorResponse;
 }
-
-export type ErrorResponse = {
-    message?: string;
-    errors?: { path: string; message: string; code?: string }[];
-};
 
 // api actions
 
@@ -28,7 +30,8 @@ export const registerUser = createAsyncThunk<
 >('auth/register', async (data, { extra: api, rejectWithValue }) => {
     try {
         const response = await api.post<AuthResponse>('/auth/register', data);
-        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem('accessToken', response.data.accessToken);
+        console.log(response.data)
         return response.data;
     } catch (err) {
         const error = err as AxiosError<ErrorResponse>;
@@ -43,23 +46,38 @@ export const loginUser = createAsyncThunk<
 >('auth/login', async (data, { extra: api, rejectWithValue }) => {
     try {
         const response = await api.post<AuthResponse>('/auth/login', data);
-        localStorage.setItem('token', response.data.accessToken);
+        localStorage.setItem('accessToken', response.data.accessToken);
+        console.log(response.data)
         return response.data;
     } catch (err) {
-        
         const error = err as AxiosError<ErrorResponse>;
         return rejectWithValue(error.response?.data ?? {message: 'Login error'});
     }
 });
 
-export const fetchInitData = createAsyncThunk<
-    {user: IUser, player: IPlayer},
+export const logoutUser = createAsyncThunk<
+    void,
     void,
     ThunkApiConfig
->('user/fetchInitData', async (_, {dispatch, extra: api, rejectWithValue}) => {
+>('auth/logout', async (_, { extra: api, dispatch, rejectWithValue }) => {
     try {
-        const response = await api.post<{user: IUser, player: IPlayer}>('/user/init');
-        
+        await api.delete('/auth/logout'); 
+    } catch (err) {
+        const error = err as AxiosError<ErrorResponse>;
+        return rejectWithValue(error.response?.data ?? {message: "Logout request failed, but clearing local data anyway"});
+    } finally {
+        dispatch(logout())
+    }
+});
+
+interface UserData {user: IUser, player: IPlayer}
+export const fetchUserData = createAsyncThunk<
+    UserData,
+    void,
+    ThunkApiConfig
+>('user/fetchUserData', async (_, { extra: api, rejectWithValue}) => {
+    try {
+        const response = await api.get<UserData>('/user/data');
         return response.data;
     } catch (err) {
         const error = err as AxiosError<ErrorResponse>;

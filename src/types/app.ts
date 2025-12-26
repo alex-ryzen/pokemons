@@ -42,22 +42,22 @@ export enum UserRoles {
 }
 
 export interface IUser {
-    userId: number;
-    isAuth: boolean;
+    user_id: number;
+    uuid: string;
     username: string; // same as login
-    role: UserRoles;
-    email?: string;
     fullname?: string;
+    email?: string;
     regdate?: Date;
     image?: string;
+    role: UserRoles;
 }
 
 export interface IPlayer {
-    playerId: number;
+    player_id: number;
     balance: string; // decimal/numeric convert
-    totalIncome: string;
-    inventorySize: number;
-    inventoryExtentionPrice: string;
+    total_income: string;
+    inventory_size: number;
+    inventory_extention_price: string;
 }
 
 /**
@@ -69,7 +69,7 @@ export interface Grid {
 }
 export type GridTypes = "inv" | "grdn";
 export type GridAreaData = {
-  accepts?: GridTypes[];
+    accepts?: GridTypes[];
 };
 
 /**

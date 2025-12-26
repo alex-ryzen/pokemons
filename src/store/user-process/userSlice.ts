@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
 import { IPlayer, IUser, UserRoles } from "../../types/app";
-import { fetchBalance, fetchInitData, fetchUserComposite, loginUser, registerUser } from "../../services/api-actions";
+import { fetchUserData, loginUser, registerUser } from "../../services/api-actions";
 
-interface UserState {
+interface UserState { // and PlayerState (2 in 1)
     user: IUser | null;
     player: IPlayer | null;
     isLoading: boolean;
+    isFileUploading: boolean;
+    isAuth: boolean;
     error: string | null;
 }
 
@@ -14,6 +15,8 @@ const initialState: UserState = {
     user: null,
     player: null,
     isLoading: false,
+    isFileUploading: false,
+    isAuth: !!localStorage.getItem('accessToken'),
     error: null,
 }
 
@@ -22,30 +25,48 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setIsAuth: (state, action: PayloadAction<boolean>) => {
-            if (state.user) {
-                state.user.isAuth = action.payload;
-            }
+            state.isAuth = action.payload;
         },
         setRole: (state, action: PayloadAction<UserRoles>) => {
-            if (state.user) {
-                state.user.role = action.payload;
-            }
+            if (state.user) state.user.role = action.payload;
         },
         logout: (state) => {
-            localStorage.removeItem('token');
+            console.log("LOGGING OUT")
+            localStorage.removeItem('accessToken');
+            state.isAuth = false;
             state.user = null;
             state.player = null;
         },
+        // reducers for sagas
+        updateProfileSuccess: (state, action: PayloadAction<Partial<IUser>>) => {
+            if (state.user) {
+                state.user = { ...state.user, ...action.payload };
+            }
+            state.isLoading = false;
+        },
+        setFileUploading: (state, action: PayloadAction<boolean>) => {
+            state.isFileUploading = action.payload;
+        },
+        updateAvatarSuccess: (state, action: PayloadAction<string>) => {
+            if (state.user) {
+                state.user.image = action.payload;
+            }
+            state.isFileUploading = false;
+        },
+        setError: (state, action: PayloadAction<string>) => {
+            state.error = action.payload;
+            state.isLoading = false;
+            state.isFileUploading = false;
+        }
     },
     extraReducers: (builder) => {
         builder
             .addCase(registerUser.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(registerUser.fulfilled, (state, action) => {
+            .addCase(registerUser.fulfilled, (state) => {
                 state.isLoading = false;
-                state.user = action.payload.user;
-                //localStorage.setItem('token', action.payload.accessToken);
+                state.isAuth = true;
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.isLoading = false;
@@ -56,10 +77,9 @@ export const userSlice = createSlice({
             .addCase(loginUser.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(loginUser.fulfilled, (state, action) => {
+            .addCase(loginUser.fulfilled, (state) => {
                 state.isLoading = false;
-                state.user = action.payload.user;
-                //localStorage.setItem('token', action.payload.accessToken);
+                state.isAuth = true;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.isLoading = false;
@@ -67,25 +87,24 @@ export const userSlice = createSlice({
             });
 
         builder
-            .addCase(fetchInitData.pending, (state) => {
+            .addCase(fetchUserData.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchInitData.fulfilled, (state, action) => {
+            .addCase(fetchUserData.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.user = action.payload.user;
                 state.player = action.payload.player;
+                console.log("STATE: ", state.user, state.player)
             })
-            .addCase(fetchInitData.rejected, (state, action) => {
+            .addCase(fetchUserData.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload as string;
             });
 
     }
-    // extraReducers: (builder) => {
-    //     builder
-    //         .addCase()
-    // }
 })
 
-export const { setIsAuth, setRole, logout } = userSlice.actions;
+export const { setIsAuth, setRole, logout,
+    updateProfileSuccess, setFileUploading, updateAvatarSuccess, setError 
+} = userSlice.actions;
 export default userSlice.reducer;

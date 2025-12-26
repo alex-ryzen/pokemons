@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { RefObject, useEffect, useRef } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import GridWindow, { GridWindowHandle } from "./GridWindow";
 import { Draggable } from "./Draggable";
@@ -9,20 +9,20 @@ import { ItemGridFuncs as IGF } from "../../../utils/handlers";
 import {
     CELL_SIZE,
     GRID_GAP,
-    GRID_CELL_W,
-    GRID_CELL_H,
-    VIEWPORT_W,
-    VIEWPORT_H
 } from "../../../consts";
 import { shallowEqual } from "react-redux";
 import { DropArea, IGridItem } from "../../../types/app";
-import styles from "./itemGrid.module.css"
 
 interface GridAreaProps {
     id: string;
     data: any;
     activeItem: IGridItem | null;
     dropArea: DropArea | null;
+    grid_cell_w: number;
+    grid_cell_h: number;
+    grid_cell_view_w: number;
+    grid_cell_view_h: number;
+    wrapperRef?: RefObject<HTMLDivElement | null>;
     registerGridRef: (node: GridWindowHandle | null) => void;
 }
 
@@ -31,6 +31,11 @@ export const GridArea: React.FC<GridAreaProps> = ({
     data,
     activeItem,
     dropArea,
+    grid_cell_w,
+    grid_cell_h,
+    grid_cell_view_w,
+    grid_cell_view_h,
+    wrapperRef,
     registerGridRef,
 }) => {
     const { setNodeRef, isOver } = useDroppable({
@@ -42,7 +47,6 @@ export const GridArea: React.FC<GridAreaProps> = ({
         (state) => state.inventory.items.filter((i) => i.gridId === id),
         shallowEqual
     );
-
 
     const windowRef = useRef<GridWindowHandle | null>(null);
 
@@ -59,12 +63,12 @@ export const GridArea: React.FC<GridAreaProps> = ({
     return (
         <GridWindow
             ref={setRefs}
-            gridWidth={GRID_CELL_W}
-            gridHeight={GRID_CELL_H}
+            gridWidth={grid_cell_w}
+            gridHeight={grid_cell_h}
             cellSize={CELL_SIZE}
             gridGap={GRID_GAP}
-            viewportWidth={VIEWPORT_W}
-            viewportHeight={VIEWPORT_H}
+            viewportWidth={grid_cell_view_w * (CELL_SIZE + GRID_GAP)}
+            viewportHeight={ grid_cell_view_h * (CELL_SIZE + GRID_GAP) }
             className={gridClass}
         >
             {({ cells }) => (
@@ -101,7 +105,7 @@ export const GridArea: React.FC<GridAreaProps> = ({
                                     GRID_GAP,
                             }}
                         >
-                            <GridItem text={item.category} />
+                            <GridItem img={item.image}/>
                         </Draggable>
                     ))}
                 </>

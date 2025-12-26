@@ -3,14 +3,17 @@
 .inventory-wrapper {
     display: block;
     position: relative;
+    height: 100%;
 }
 
 .inventory {
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .item-grid-wrapper {
+    height: 100%;
     padding: 0px 16px 16px 16px;
 }
 

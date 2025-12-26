@@ -1,5 +1,5 @@
 import { FC, HTMLAttributes, ReactNode } from "react";
-import styles from "./itemGrid.module.css"
+import styles from "./gridItem.module.css"
 
 export interface IGridItemProps extends HTMLAttributes<HTMLDivElement> {
     text?: string;

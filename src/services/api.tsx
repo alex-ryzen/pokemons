@@ -5,14 +5,14 @@ import axios, {
     InternalAxiosRequestConfig,
 } from "axios";
 import { StatusCodes } from "http-status-codes";
-import { IUser } from "../types/app";
 import { toast } from "react-toastify";
 import { BACKEND_URL } from "../consts";
 import { ErrorResponse } from "./api-actions";
+import { logout } from "../store/user-process/userSlice";
+import { AppDispatch } from "../store/store";
 
 export type AuthResponse = {
     accessToken: string;
-    user: IUser;
 };
 
 const StatusCodeMapping: Record<number, boolean> = {
@@ -29,6 +29,11 @@ const isError = (response: AxiosResponse) => StatusCodeMapping[response.status];
 
 type RetryConfig = InternalAxiosRequestConfig & { _isRetry?: boolean };
 
+let dispatch: AppDispatch;
+export const injectDispatch = (app_dispatch: AppDispatch) => {
+    dispatch = app_dispatch;
+};
+
 export const createAPI = (): AxiosInstance => {
     const api = axios.create({
         baseURL: BACKEND_URL,
@@ -42,18 +47,18 @@ export const createAPI = (): AxiosInstance => {
     }> = [];
 
     const processQueue = (error: any, token: string | null = null) => {
-        failedQueue.forEach((prom) => {
+        failedQueue.forEach((promise) => {
             if (error) {
-                prom.reject(error);
+                promise.reject(error);
             } else {
-                prom.resolve(token);
+                promise.resolve(token);
             }
         });
         failedQueue = [];
     };
 
     api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("accessToken");
         if (token && config.headers) {
             config.headers["Authorization"] = `Bearer ${token}`;
         }
@@ -93,11 +98,11 @@ export const createAPI = (): AxiosInstance => {
                 originalRequest._isRetry = true;
                 isRefreshing = true;
                 try {
-                    const response = await axios.get<AuthResponse>(
+                    const response = await api.patch<AuthResponse>(
                         `${BACKEND_URL}/auth/refresh-token`
                     );
                     const newToken = response.data.accessToken;
-                    localStorage.setItem("token", newToken);
+                    localStorage.setItem("accessToken", newToken);
                     processQueue(null, newToken);
                     originalRequest.headers[
                         "Authorization"
@@ -106,6 +111,7 @@ export const createAPI = (): AxiosInstance => {
                 } catch (err) {
                     processQueue(err, null);
                     console.log("- - - unauthorized - - -");
+                    dispatch(logout())
                     return Promise.reject(err);
                 } finally {
                     isRefreshing = false;
@@ -128,8 +134,6 @@ export const createAPI = (): AxiosInstance => {
                     );
                 } else if (data?.message) {
                     toast.warn(data.message);
-                } else {
-                    toast.warn("Unknown error");
                 }
             }
 

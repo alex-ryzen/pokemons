@@ -4,6 +4,7 @@ import {
     ForwardedRef,
     forwardRef,
     HTMLInputTypeAttribute,
+    memo,
     MouseEvent,
     useState,
 } from "react";
@@ -19,17 +20,19 @@ export type InputExtendedClassNames = {
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     type: HTMLInputTypeAttribute;
     id?: string;
+    name?: string;
     ref?: ForwardedRef<HTMLInputElement>
     label?: string;
     error?: string;
     extClassName?: InputExtendedClassNames;
 }
 
-const AuthInput: FC<InputProps> = forwardRef((
+const AuthInput: FC<InputProps> = memo(forwardRef((
     (
         {
             type = "text",
             id,
+            name,
             label,
             error,
             extClassName,
@@ -78,6 +81,7 @@ const AuthInput: FC<InputProps> = forwardRef((
                     <Input
                         ref={ref}
                         id={id}
+                        name={name}
                         type={isHidden ? type : "text"}
                         className={inputClasses}
                         aria-invalid={!!error}
@@ -88,7 +92,7 @@ const AuthInput: FC<InputProps> = forwardRef((
                     />
 
                     {type === "password" && (
-                        <button className={styles.hideButton} onClick={toggleHidden}>
+                        <button type="button" className={styles.hideButton} onClick={toggleHidden}>
                             {isHidden ?
                                 (
                                     <svg
@@ -141,7 +145,7 @@ const AuthInput: FC<InputProps> = forwardRef((
             </div>
         );
     }
-));
+)));
 
 export default AuthInput;
 

@@ -1,0 +1,21 @@
+.error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    padding: 24px;
+}
+
+.error-page > img {
+    height: auto;
+    width: 100%;
+    border: 2px solid var(--primary-color);
+}
+
+.error-page button {
+    margin: 24px;
+}

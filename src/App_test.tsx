@@ -8,6 +8,25 @@ import {
   DragMoveEvent,
 } from "@dnd-kit/core";
 
+// function handleRoute(route: RouteLayoutProps) {
+//   const preparedLayoutContent = Object.fromEntries(
+//     Object.entries(route.layoutContent ?? {}).map(([key, Comp]) => [
+//       key,
+//       Comp ? React.createElement(Comp) : undefined
+//     ])
+//   );
+//   return (
+//     <Route key={route.path} element={<route.layout {...preparedLayoutContent} />}>
+//       <Route path={route.path} element={React.createElement(route.component)} />
+//     </Route>
+//   );
+// }
+
+{/* <Routes>
+  {publicRoutes.map((route) => handleRoute(route))}
+  {isAuth && privateRoutes.map((privateRoute) => handleRoute(privateRoute))}
+</Routes> */}
+
 const GRID_WIDTH = 5; // cells
 const GRID_HEIGHT = 3; // cells
 const CELL_SIZE = 48; // px

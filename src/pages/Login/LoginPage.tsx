@@ -36,7 +36,3 @@ const LoginPage = () => {
 }
  
 export default LoginPage;
-
-// <>
-//     <h1>LOGIN PAGE</h1>
-// </>

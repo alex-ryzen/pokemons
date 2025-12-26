@@ -5,9 +5,9 @@ import styles from "./authLayout.module.css"
 
 const AuthLayout = () => {
   return (
-    <div className={styles.mainContainer}>
+    <main className={styles.mainContainer}>
         <Outlet/>
-    </div>
+    </main>
   );
 }
 
