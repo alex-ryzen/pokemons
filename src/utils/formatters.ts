@@ -7,6 +7,8 @@
  * @param num 
  * @returns Formatted number string 
  */
-export const formatBalance = (num: number): string => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+export const formatBalance = (num: number | bigint | string): string => {
+    if (typeof num === "string") num = Number(num);
+    return new Intl.NumberFormat('ru-RU').format(num);
+    // return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 };

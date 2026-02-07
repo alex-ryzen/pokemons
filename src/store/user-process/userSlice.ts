@@ -16,7 +16,7 @@ const initialState: UserState = {
     player: null,
     isLoading: false,
     isFileUploading: false,
-    isAuth: !!localStorage.getItem('accessToken'),
+    isAuth: false,
     error: null,
 }
 
@@ -92,9 +92,10 @@ export const userSlice = createSlice({
             })
             .addCase(fetchUserData.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.isAuth = true;
                 state.user = action.payload.user;
                 state.player = action.payload.player;
-                console.log("STATE: ", state.user, state.player)
+                // console.log("STATE: ", state.user, state.player)
             })
             .addCase(fetchUserData.rejected, (state, action) => {
                 state.isLoading = false;

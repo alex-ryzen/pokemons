@@ -16,7 +16,7 @@ interface ModalProps {
     title?: string;
 }
 
-const TIMEOUT = 180
+const TIMEOUT = 200
 
 const Modal: FC<ModalProps> = ({
     open,
@@ -81,7 +81,7 @@ const Modal: FC<ModalProps> = ({
                     <div className={styles.modalFooter}>
                         <div className={styles.modalFooterContainer}>
                             <Button onClick={onClose}>
-                                <span style={{ padding: "4px 16px " }}>Закрыть</span>
+                                <span style={{ padding: "8px 16px " }}>Закрыть</span>
                             </Button>
                         </div>
                     </div>

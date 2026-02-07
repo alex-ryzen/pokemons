@@ -22,9 +22,10 @@ import { DropArea, IGridItem } from "../types/app";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { CELL_SIZE, GRID_GAP, SCROLL_MARGIN, SCROLL_SPEED } from "../consts";
 import { setPosition } from "../store/item-process/inventorySlice";
+import { GridSpecs } from "../components/UI/ItemGrid/GridArea";
 
 interface GridActionsType {
-    registerGrid: (id: UniqueIdentifier) => (handle: GridWindowHandle | null) => void;
+    registerGrid: (id: UniqueIdentifier) => (grid: GridSpecs | null) => void;
     handleDragStart: (e: DragStartEvent) => void;
     handleDragMove: (e: DragMoveEvent) => void;
     handleDragEnd: (e: DragEndEvent) => void;
@@ -41,28 +42,25 @@ export const GridStateCTX = createContext<GridStateType | null>(null)
 
 export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const dispatch = useAppDispatch();
-    const items = useAppSelector((s) => s.inventory.items);
+    const items = [
+        ...useAppSelector((s) => s.inventory.items),
+        ...useAppSelector((s) => s.garden.items),
+    ];
 
     const activeItem = useRef<IGridItem | null>(null)
-    //const [activeItem, setActiveItem] = useState<IGridItem | null>(null);
+    // const [dragState, setDragState] = useState<GridStateType>({ activeItem: null, dropArea: null });
     const [dropArea, setDropArea] = useState<DropArea | null>(null);
 
-    const gridRefs = useRef<Record<UniqueIdentifier, GridWindowHandle | null>>(
+    const gridRefs = useRef<Record<UniqueIdentifier, GridSpecs | null>>(
         {}
     );
+    //useEffect(() => console.log("GRID REFS ", gridRefs), [items])
+
     const autoScrollTimer = useRef<number | null>(null);
 
-    useEffect(() => {
-        if (activeItem.current) {
-            document.body.classList.add("is-dragging");
-        } else {
-            document.body.classList.remove("is-dragging");
-        }
-    }, [activeItem]);
-
     const registerGrid = useCallback(
-        (id: UniqueIdentifier) => (handle: GridWindowHandle | null) => {
-            gridRefs.current[id] = handle;
+        (id: UniqueIdentifier) => (grid: GridSpecs | null) => {
+            gridRefs.current[id] = grid;
         },
         []
     );
@@ -109,6 +107,7 @@ export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
                     cTargetX: found.cPosX,
                     cTargetY: found.cPosY,
                 }
+                setDropArea(IGF.getDropArea(activeItem.current));
             }
         },
         [items]
@@ -126,7 +125,7 @@ export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
             }
 
             const gridId = over.id;
-            const handle = gridRefs.current[gridId];
+            const handle = gridRefs.current[gridId]?.handle;
             //console.log("DRAG MOVE", gridRefs)
             const container = handle?.container;
 
@@ -197,8 +196,12 @@ export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
                 const targetItems = items.filter(
                     (i) => i.gridId === targetGridId && i.id !== active.id
                 );
-
-                if (IGF.canPlace(targetItems, finalItem)) {
+                const grid_cell_w = gridRefs.current[targetGridId]?.grid.grid_cell_w || 0
+                const grid_cell_h = gridRefs.current[targetGridId]?.grid.grid_cell_h || 0
+                const actual_size = gridRefs.current[targetGridId]?.grid.actualSize || 0
+                const max_h_size = Math.round(actual_size / grid_cell_w)
+                
+                if (IGF.canPlace(targetItems, finalItem, grid_cell_w, grid_cell_h, max_h_size)) {
                     dispatch(
                         setPosition({
                             id: active.id,
@@ -229,6 +232,8 @@ export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
         handleDragEnd,
         handleDragCancel
     }), [registerGrid, handleDragStart, handleDragMove, handleDragEnd, handleDragCancel]);
+
+    //useEffect(() => console.log("ACTIVE ITEM HAS CHANGED: ", activeItem.current), [activeItem.current])
 
     const state = useMemo(() => ({
         activeItem: activeItem.current,

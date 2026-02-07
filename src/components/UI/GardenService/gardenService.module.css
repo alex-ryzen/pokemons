@@ -1,0 +1,9 @@
+
+.service-title {
+    display: block;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 700;
+}

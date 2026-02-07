@@ -20,7 +20,7 @@ const initItems: IItem[] = [
         category: "berry",
         cSize: 2,
         cPosX: 3,
-        cPosY: 3,
+        cPosY: 1,
         image: "/images/items/d3c0698fdebee1e1c412fdd15288a696c106dd6e.png",
     },
     {
@@ -39,8 +39,8 @@ const initItems: IItem[] = [
         gridId: "inv",
         category: "pokeball",
         cSize: 1,
-        cPosX: 1,
-        cPosY: 2,
+        cPosX: 2,
+        cPosY: 1,
         image: "/images/items/1c8e6d145c9ef9b8ec6a860ea8bf65c115fb1539.png",
     },
     {
@@ -104,9 +104,6 @@ const HomePage = memo(() => {
         dispatch(setInventoryItems(initItems));
     }, []);
 
-    useEffect(() => {
-        console.log("ПЕРЕРИСОВКА HOME PAGE ,", containerRef.current?.clientHeight)
-    })
     return (
         <DndContext
             sensors={sensors}

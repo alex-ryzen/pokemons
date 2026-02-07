@@ -9,10 +9,18 @@ export interface IGridCellProps {
     y: number;
     isValid: boolean;
     isCovered: boolean;
+    isAvailable: boolean;
 }
 
 export const GridCell: FC<IGridCellProps> = memo(
-    ({ id, x, y, isValid, isCovered }) => {
+    ({ 
+        id, 
+        x, 
+        y, 
+        isValid, 
+        isCovered, 
+        isAvailable 
+    }) => {
         return (
             <div
                 className={styles.itemGridCell}
@@ -28,6 +36,7 @@ export const GridCell: FC<IGridCellProps> = memo(
                             ? "#59ff7d"
                             : "#eb546d"
                         : "#EFEFEF",
+                    opacity: isAvailable ? 1 : 0.3
                 }}
             >
                 {`${id}-${y}-${x}`}

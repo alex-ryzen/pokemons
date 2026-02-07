@@ -8,12 +8,17 @@ const AuthApp = () => {
     const dispatch = useAppDispatch();
     const { isAuth } = useAppSelector(state => state.user);
     const location = useLocation();
-    
+
     useEffect(() => {
-        console.log("AUTHed: ", isAuth)
-        if (isAuth) {
+        const token = localStorage.getItem('accessToken');
+        
+        if (token) {
             dispatch(fetchUserData())
         }
+    }, [])
+
+    useEffect(() => {
+        console.log("AUTHed: ", isAuth)
     }, [isAuth])
     
     if (!isAuth) {

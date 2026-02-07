@@ -6,14 +6,12 @@ import { Link } from "react-router";
 import { useEffect } from "react";
 import { useAppSelector } from "../../../hooks";
 import { RouteNames } from "../../../router/routes";
+import MoneyTitle from "../Balance/Balance";
 
 interface HeaderProps { }
 
 const Header = (headerProps: HeaderProps) => {
     const { user, player, isAuth } = useAppSelector(state => state.user)
-    useEffect(() => {
-        console.log("Header render")
-    })
     return (
         <header className={`${styles["header"]} content-block`} id="header">
             <div className={styles["header-container"]}>
@@ -38,15 +36,7 @@ const Header = (headerProps: HeaderProps) => {
                             <circle cx="12" cy="12" r="10" />
                         </svg>
                     </Link>
-
-                    <div className={styles["balance-container"]}>
-                        <img
-                            src={"./images/icon/pokecoin.png"}
-                            alt=""
-                            className={styles["balance-coin-icon"]}
-                        />
-                        <BlockTitle>{formatBalance(100000000)}</BlockTitle>
-                    </div>
+                    <MoneyTitle amount={100000000}/>
                 </div>
             </div>
         </header>

@@ -16,9 +16,9 @@ const Stats: FC<StatsProps> = ({stats, img}) => {
         <div className={styles.statsWrapper}>
             <div className={styles.statsContainer}>
                 <div className={styles.statPokeContainer}>
-                    <img className={styles.statPokeImg} src={img ?? '/images/placeholders/thumbnail.webp'} alt="" />
+                    <img className={styles.statPokeImg} src={img ?? '/images/placeholders/thumbnail.webp'} alt=""/>
                     <Button onClick={() => {console.log("D E L E T E D")}}>
-                        <span>Удалить покемона</span> 
+                        <span style={{padding: "8px"}} >Удалить покемона</span> 
                     </Button>
                 </div>
                 <div className={styles.statListContainer}>
@@ -31,7 +31,7 @@ const Stats: FC<StatsProps> = ({stats, img}) => {
                     </ul>
                     <div className={styles.statInpContainer}>
                         <Input type="text" placeholder="Псевдоним покемона"></Input>
-                        <Button onClick={() => {console.log("S A V E D")}} style={{padding: "0px 16px "}}>
+                        <Button onClick={() => {console.log("S A V E D")}}>
                             <span>Сохранить</span> 
                         </Button>
                     </div>      

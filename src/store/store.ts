@@ -6,6 +6,7 @@ import createSagaMiddleware from 'redux-saga'
 import userReducer from './user-process/userSlice'
 import pokemonReducer from './pokemon-process/pokemonSlice'
 import inventoryReducer from './item-process/inventorySlice'
+import gardenReducer from './item-process/gardenSlice.ts'
 import shopReducer from './item-process/shopSlice'
 import { rootSaga } from './root-saga.ts'
 
@@ -27,7 +28,7 @@ export const rootReducer = combineReducers({
     user: userReducer,
     inventory: inventoryReducer,
     shop: shopReducer,
-    //garden: gardenReducer,
+    garden: gardenReducer,
     pokemons: pokemonReducer,
 })
 

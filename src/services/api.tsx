@@ -110,7 +110,7 @@ export const createAPI = (): AxiosInstance => {
                     return api.request(originalRequest);
                 } catch (err) {
                     processQueue(err, null);
-                    console.log("- - - unauthorized - - -");
+                    console.error("- - - unauthorized - - -");
                     dispatch(logout())
                     return Promise.reject(err);
                 } finally {
@@ -118,6 +118,7 @@ export const createAPI = (): AxiosInstance => {
                 }
             } else if (error.response && isError(error.response)) {
                 const data = error.response.data;
+                console.log(data)
                 if (data?.errors?.length) {
                     toast.warn(
                         <div>
@@ -135,6 +136,8 @@ export const createAPI = (): AxiosInstance => {
                 } else if (data?.message) {
                     toast.warn(data.message);
                 }
+            } else if (!error.response) {
+                toast.error("Connection error")
             }
 
             return Promise.reject(error);

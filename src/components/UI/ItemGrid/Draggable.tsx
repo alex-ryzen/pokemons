@@ -31,6 +31,8 @@ export const Draggable = ({ id, data, children, draggableStyles }: IDraggablePro
             data,
         });
 
+    useEffect(() => console.log('DRAGGING: ', isDragging), [isDragging])
+
     const style = {
         ...draggableStyles,
         transform: CSS.Translate.toString(transform),
@@ -46,6 +48,7 @@ export const Draggable = ({ id, data, children, draggableStyles }: IDraggablePro
             style={style}
             {...listeners}
             {...attributes}
+            //onMouseDown={}
             data-draggable="true"
         >
             {children}

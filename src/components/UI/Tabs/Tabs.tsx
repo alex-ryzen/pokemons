@@ -75,6 +75,11 @@ export const Tabs: FC<TabsProps> = ({ tabs, activeTab, changeTab }) => {
         const el = containerRef.current;
         if (!el) return;
         const onDragStart = (e: TouchEvent | MouseEvent) => {
+            const target = e.target as HTMLElement;
+            const excludeTags = ['INPUT', 'TEXTAREA', 'SELECT', 'OPTION', 'SPAN', 'P', 'B', 'I', 'STRONG', 'EM', 'LABEL', 'H1', 'H2', 'H3'];
+            if (excludeTags.includes(target.tagName) || target.isContentEditable) {
+                return;
+            }
             if (state.current.isLocked) return;
             if ('button' in e && e.button !== 0) return;
 

@@ -1,4 +1,4 @@
-import { FormEvent, MouseEvent, useCallback, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 import Button from "../UI/Button/Button";
 import AuthInput from "../UI/Input/AuthInput";
 import { useAppDispatch } from "../../hooks";
@@ -35,7 +35,7 @@ const LoginForm = () => {
             <form className={styles.authForm} onSubmit={submitForm}>
                 <AuthInput name="login" type="text" label="Login" value={formData.login} onChange={handleChange} placeholder="Input login" required></AuthInput>
                 <AuthInput name="password" type="password" label="Password" value={formData.password} onChange={handleChange} placeholder="Input Password" required></AuthInput>
-                <Button type="submit"><span>Sign in</span></Button>
+                <Button type="submit"><span style={{padding: "8px 16px"}}>Sign in</span></Button>
             </form>
         </div>
     );

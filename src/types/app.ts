@@ -150,12 +150,13 @@ export interface IPokeball extends IItem {
  */
 
 export interface IGarden {
-    gardenSize: number;
-    growthSpeed?: number;
+    garden_size: number;
+    growth_speed?: number;
 }
 
 export interface IGardenService {
     title: string;
+    name: string;
     price: number;
     category: string;
     type: 'single-use' | 'persistent';

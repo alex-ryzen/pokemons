@@ -1,4 +1,4 @@
-import { FormEvent, MouseEvent, useCallback, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 import Button from "../UI/Button/Button";
 import AuthInput from "../UI/Input/AuthInput";
 import { RegisterData } from "../../types/app";
@@ -37,12 +37,12 @@ const RegForm = () => {
 
     return (
         <div className={`${styles.authFormWrapper}`}>
-            <form className={styles.authForm} onSubmit={submitForm}>
-                <AuthInput name="username" type="text" label="Login" value={formData.username} onChange={handleChange} placeholder="Input username" required></AuthInput>
-                <AuthInput name="email" type="email" label="Email" value={formData.email} onChange={handleChange} placeholder="Input email" required></AuthInput>
+            <form id="" className={styles.authForm} onSubmit={submitForm}>
+                <AuthInput name="username" type="text" label="Login" value={formData.username} onChange={handleChange} placeholder="Input username" autoComplete="username" required></AuthInput>
+                <AuthInput name="email" type="email" label="Email" value={formData.email} onChange={handleChange} placeholder="Input email" autoComplete="email" required></AuthInput>
                 <AuthInput name="password" type="password" label="Password" value={formData.password} onChange={handleChange} placeholder="Input Password" required></AuthInput>
                 <AuthInput name="password_confirmation" type="password" label="Password confirmation" value={formData.password_confirmation} onChange={handleChange} placeholder="Input password again" required></AuthInput>
-                <Button type="submit"><span>Sign in</span></Button>
+                <Button type="submit"><span style={{padding: "8px 16px"}}>Sign in</span></Button>
             </form>
         </div>
     );

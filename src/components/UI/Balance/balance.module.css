@@ -1,0 +1,12 @@
+.balance-container {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+    cursor: crosshair;
+}
+
+.balance-coin-icon {
+    max-height: 100%;
+    height: 32px;
+}

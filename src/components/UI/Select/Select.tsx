@@ -31,7 +31,15 @@ const Select: FC<SelectProps> = memo(({ name, options, onSelect, disabled }) => 
     return (
         <div ref={rootRef} className={styles.selectWrapper}>
             <select name={name} className={styles.select} onClick={(e) => {e.preventDefault()}} aria-label={`${name} custom select`}></select>
-            <div className={styles.selectBar} onClick={toggleOpen}>
+            <div 
+                className={styles.selectBar} 
+                onClick={toggleOpen}
+                role="button"
+                tabIndex={0}
+                aria-haspopup="listbox"
+                aria-expanded={open}
+                aria-disabled={disabled}
+            >
                 <span>{selected.label}</span>
             </div>
             <CSSTransition

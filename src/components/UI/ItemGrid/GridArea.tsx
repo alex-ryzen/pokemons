@@ -12,30 +12,45 @@ import {
 } from "../../../consts";
 import { shallowEqual } from "react-redux";
 import { DropArea, IGridItem } from "../../../types/app";
+import Button from "../Button/Button";
+import Balance from "../Balance/Balance";
 
 interface GridAreaProps {
     id: string;
     data: any;
+    actualSize: number;
     activeItem: IGridItem | null;
     dropArea: DropArea | null;
     grid_cell_w: number;
+    // grid_cell_w_aclual: number;
     grid_cell_h: number;
+    // grid_cell_h_aclual: number;
     grid_cell_view_w: number;
     grid_cell_view_h: number;
     wrapperRef?: RefObject<HTMLDivElement | null>;
-    registerGridRef: (node: GridWindowHandle | null) => void;
+    extentionPrice?: number | string;
+    registerGridRef: (node: GridSpecs | null) => void;
+}
+
+export interface GridSpecs {
+    grid: Omit<GridAreaProps, "activeItem" | "dropArea" | "wrapperRef" | "registerGridRef">,
+    handle: GridWindowHandle | null,
 }
 
 export const GridArea: React.FC<GridAreaProps> = ({
     id,
     data,
+    actualSize,
     activeItem,
     dropArea,
     grid_cell_w,
+    // grid_cell_w_aclual,
     grid_cell_h,
+    // grid_cell_h_aclual,
     grid_cell_view_w,
     grid_cell_view_h,
     wrapperRef,
+    extentionPrice,
     registerGridRef,
 }) => {
     const { setNodeRef, isOver } = useDroppable({
@@ -52,13 +67,31 @@ export const GridArea: React.FC<GridAreaProps> = ({
 
     const setRefs = (node: GridWindowHandle | null) => {
         windowRef.current = node;
-        registerGridRef(node);
+        registerGridRef({
+            grid: {
+                id,
+                data,
+                actualSize,
+                grid_cell_w,
+                // grid_cell_w_aclual,
+                grid_cell_h,
+                // grid_cell_h_aclual,
+                grid_cell_view_w,
+                grid_cell_view_h,
+                extentionPrice,
+            }, 
+            handle: node
+        });
         if (node?.container) {
             setNodeRef(node.container);
         }
     };
 
     const gridClass = isOver ? "grid-active-blink" : ""; //styles.gridActiveBlink 
+
+    const handleExtBtnClick = () => {
+        console.log("EXTENSION BTN WAS CLICKED! ID: ", id)
+    }
 
     return (
         <GridWindow
@@ -67,8 +100,8 @@ export const GridArea: React.FC<GridAreaProps> = ({
             gridHeight={grid_cell_h}
             cellSize={CELL_SIZE}
             gridGap={GRID_GAP}
-            viewportWidth={grid_cell_view_w * (CELL_SIZE + GRID_GAP)}
-            viewportHeight={ grid_cell_view_h * (CELL_SIZE + GRID_GAP) }
+            viewportWidth={ grid_cell_view_w * (CELL_SIZE + GRID_GAP) }
+            viewportHeight={ grid_cell_view_h * (CELL_SIZE + GRID_GAP) - 8}
             className={gridClass}
         >
             {({ cells }) => (
@@ -76,7 +109,9 @@ export const GridArea: React.FC<GridAreaProps> = ({
                     {cells.map(({ x, y }) => {
                         const isTargetGrid = activeItem?.gridId === id;
                         const isCovered = isTargetGrid && isOver && IGF.isCovered(dropArea, x, y);
-                        const isValid = IGF.isDroppable(items, activeItem, dropArea, x, y);
+                        const max_available_c_h = Math.round(actualSize / grid_cell_w);
+                        const isValid = IGF.isDroppable(items, activeItem, dropArea, x, y, grid_cell_w, grid_cell_h, max_available_c_h);
+                        const isAvailable = (y < max_available_c_h);
                         return (
                             <GridCell
                                 key={`${id}-${x}-${y}`}
@@ -85,6 +120,7 @@ export const GridArea: React.FC<GridAreaProps> = ({
                                 y={y}
                                 isCovered={isCovered}
                                 isValid={isValid}
+                                isAvailable={isAvailable}
                             />
                         );
                     })}
@@ -108,6 +144,28 @@ export const GridArea: React.FC<GridAreaProps> = ({
                             <GridItem img={item.image}/>
                         </Draggable>
                     ))}
+                    {
+                        extentionPrice && 
+                        <Button
+                            onClick={handleExtBtnClick}
+                            style={{
+                                background: "transparent",
+                                position: "absolute",
+                                left: 0,
+                                top: Math.round(actualSize / grid_cell_w) * (CELL_SIZE + GRID_GAP),
+                                width:
+                                    grid_cell_w * (CELL_SIZE + GRID_GAP) -
+                                    GRID_GAP,
+                                height:
+                                    1 * (CELL_SIZE + GRID_GAP) -
+                                    GRID_GAP,
+                                borderRadius: 4,
+                                border: "3px solid var(--secondary-color)"
+                            }}
+                        >
+                            <Balance amount={extentionPrice}></Balance>
+                        </Button>
+                    }
                 </>
             )}
         </GridWindow>

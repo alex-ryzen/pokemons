@@ -16,7 +16,7 @@ const initialState: InvItemState = {
 };
 
 export const inventorySlice = createSlice({
-    name: "inventoryItems",
+    name: "inventory",
     initialState: initialState,
     reducers: {
         setInventoryItems: (state, action: PayloadAction<IItem[]>) => { // PayloadAction<IItem[]> or { payload: IItem[] }

@@ -19,8 +19,8 @@ const MainLayout = ({}: MainLayoutProps) => {
         <MainProviders>
             <div className={styles.mainLayout}>
                 <Header />
-                    <Outlet />
-                <Footer /> {/* no footer actually */}
+                <Outlet />
+                {/* <Footer /> no footer actually */}
             </div>
         </MainProviders>
     );

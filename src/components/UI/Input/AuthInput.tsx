@@ -6,6 +6,7 @@ import {
     HTMLInputTypeAttribute,
     memo,
     MouseEvent,
+    useId,
     useState,
 } from "react";
 import styles from "./input.module.css";
@@ -41,6 +42,7 @@ const AuthInput: FC<InputProps> = memo(forwardRef((
         ref
     ) => {
         const [isHidden, setIsHidden] = useState(true)
+        const inputId = id || useId();
         const inputClasses = [
             styles.input,
             error && styles.inputError,
@@ -71,7 +73,7 @@ const AuthInput: FC<InputProps> = memo(forwardRef((
                                 </svg>
                             </span>
                         )}
-                        <label htmlFor={id} className={`${styles.inputLabel} ${error ? styles.inputLabelError : ""}`}>
+                        <label htmlFor={inputId} className={`${styles.inputLabel} ${error ? styles.inputLabelError : ""}`}>
                             {label}
                         </label>
                     </div>
@@ -80,7 +82,7 @@ const AuthInput: FC<InputProps> = memo(forwardRef((
                 <div className={`${styles.inputWrapper} ${extClassName?.wrapperClassName ?? ""}`}>
                     <Input
                         ref={ref}
-                        id={id}
+                        id={inputId}
                         name={name}
                         type={isHidden ? type : "text"}
                         className={inputClasses}
@@ -119,9 +121,9 @@ const AuthInput: FC<InputProps> = memo(forwardRef((
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="var(--border-color)"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                         className="lucide lucide-eye-icon lucide-eye"
                                     >
                                         <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />

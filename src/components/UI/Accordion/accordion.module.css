@@ -13,6 +13,7 @@
   position: relative;
   overflow: hidden;
   border-radius: inherit;
+  height: 100%;
 }
 
 .accordion-header-wrapper {
@@ -43,14 +44,15 @@
 }
 
 .accordion-content-wrapper {
+  display: flex;
   position: relative;
   overflow: hidden;
   transition: all 0.25s cubic-bezier(.25,1,.7,1);
 }
 
-.accordion--open .accordion-content-wrapper {
+/* .accordion--open .accordion-content-wrapper {
   overflow: auto;
-}
+} */
 
 .accordion--open .accordion-content-wrapper::before {
   content: '';
@@ -89,7 +91,7 @@
 }
 
 .accordion--open .accordion-content {
-  /* max-height: 56vh; */
+  max-height: none;
   overflow: auto;
   opacity: 1;
   visibility: visible;
@@ -101,28 +103,31 @@
 }
 
 .accordion-inner {
+  height: 0;
   background: transparent;
   transition: opacity 180ms ease, transform 180ms ease;
   will-change: opacity, transform;
 }
 
+.accordion-inner-container {
+  padding-bottom: 16px;
+}
+
 .accEnter .accordion-inner {
   opacity: 0;
-  transform: translateY(-4px);
 }
 
 .accEnterActive .accordion-inner {
   opacity: 1;
-  transform: translateY(0);
+  transition: opacity 250ms;
 }
 
 .accExit .accordion-inner {
   opacity: 1;
-  transform: translateY(0);
 }
 
 .accExitActive .accordion-inner {
   opacity: 0;
-  transform: translateY(-4px);
+  transition: opacity 250ms;
 }
 

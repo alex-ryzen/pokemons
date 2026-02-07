@@ -4,7 +4,6 @@ import { ItemCardProps } from '../UI/ItemCard/ItemCard';
 import styles from './shop.module.css'
 import { useAppDispatch } from '../../hooks';
 import { fetchShopItems } from '../../services/api-actions';
-import { getShop } from '../../store/item-process/itemSelectors';
 import { FilterArgs } from '../../hooks/useFilter';
 import Sort from '../UI/Sort/Sort';
 import FilterBar from '../UI/Filter/FilterBar';
@@ -13,6 +12,7 @@ import Button from '../UI/Button/Button';
 import { useObserver } from '../../hooks/useObserver';
 import ItemList from '../UI/ItemList/ItemList';
 import { returnByKey } from '../../utils/functions';
+import { getShop } from '../../store/item-process/shopSlice';
 
 const shopFilter: FilterArgs['content'] = {
     product: {

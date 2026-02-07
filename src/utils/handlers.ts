@@ -1,6 +1,5 @@
 import { RefObject, Ref } from "react";
 import { DropArea, IGridItem } from "../types/app";
-import { GRID_CELL_H, GRID_CELL_W } from "../consts";
 
 /**
  * Merges batch of React Refs into single callback-ref
@@ -32,12 +31,12 @@ export class ItemGridFuncs {
         return !(x2 >= x1 + s1 || x2 + s2 <= x1 || y2 >= y1 + s1 || y2 + s2 <= y1);
     }
 
-    static canPlace(items: IGridItem[], item: IGridItem): boolean {
+    static canPlace(items: IGridItem[], item: IGridItem, grid_c_w: number, grid_c_h: number, max_c_h: number): boolean {
         const x = item.cTargetX ?? item.cPosX;
         const y = item.cTargetY ?? item.cPosY;
         const size = item.cSize;
 
-        if (x < 0 || y < 0 || x + size > GRID_CELL_W || y + size > GRID_CELL_H) {
+        if (x < 0 || y < 0 || x + size > grid_c_w || y + size > grid_c_h || y + size > max_c_h) {
             return false;
         }
 
@@ -83,10 +82,13 @@ export class ItemGridFuncs {
         activeItem: IGridItem | null,
         dropArea: DropArea | null,
         x: number,
-        y: number
+        y: number,
+        grid_c_w: number, 
+        grid_c_h: number, 
+        max_c_h: number
     ): boolean {
         if (this.isCovered(dropArea, x, y) && activeItem) {
-            return this.canPlace(items, activeItem);
+            return this.canPlace(items, activeItem, grid_c_w, grid_c_h, max_c_h);
         }
         return false;
     }

@@ -59,7 +59,7 @@ const initPokemonTabs: TabConfig[] = [
             <ItemList 
                 items={initPokemonFood}
                 wrapperStyles={{ padding: "10px 24px" }}
-                containerStyles={{ height: 320, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}
+                containerStyles={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}
             ></ItemList>
     },
     {

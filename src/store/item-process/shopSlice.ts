@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchShopItems, purchaseItem } from "../../services/api-actions";
 import { IShopItem } from "../../types/app";
 import { ShopQueryParams } from "../../components/Shop/Shop";
+import { useAppSelector } from "../../hooks";
+import { Namespace } from "../../consts";
 
 export interface ShopItemState {
     shopItems: IShopItem[];
@@ -67,5 +69,7 @@ export const shopSlice = createSlice({
 });
 export const { setShopItems, pushShopItems, resetShopItems } =
     shopSlice.actions;
+
+export const getShop = () => useAppSelector(state => state[Namespace.shop]);
 
 export default shopSlice.reducer;
