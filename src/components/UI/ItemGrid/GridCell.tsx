@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, memo, ReactNode } from "react";
+import { FC, memo } from "react";
 import styles from "./itemGrid.module.css"
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { CELL_SIZE, GRID_GAP } from "../../../consts";

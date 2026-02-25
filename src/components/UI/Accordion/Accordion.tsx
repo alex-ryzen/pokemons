@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useMemo, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import BlockTitle from "../BlockTitle/BlockTitle";
 import styles from "./accordion.module.css";
@@ -12,7 +12,7 @@ interface AccordionProps {
     containerRef: RefObject<HTMLDivElement | null>;
 }
 
-function Accordion({ isOpen, title, onClick, children, sectionsCount, containerRef }: AccordionProps) {
+function Accordion({ isOpen, title, onClick, children, containerRef }: AccordionProps) {
     const headerWrapperRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const [headerHeight, setHeaderHeight] = useState(0);

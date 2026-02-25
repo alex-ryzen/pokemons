@@ -7,11 +7,12 @@ interface ItemListProps {
     items: ItemCardProps[],
     tailRef?: RefObject<HTMLDivElement | null>,
     isLoading?: boolean,
+    isError?: boolean,
     wrapperStyles?: CSSProperties,
     containerStyles?: CSSProperties,
 }
 
-const ItemList: FC<ItemListProps> = ({items, tailRef, isLoading, wrapperStyles, containerStyles}) => {
+const ItemList: FC<ItemListProps> = ({items, tailRef, isLoading, isError = false, wrapperStyles, containerStyles}) => {
     return ( 
         <div className={styles.itemsWrapper} style={wrapperStyles}>
             <div className={styles.itemsContainer} style={containerStyles}>
@@ -21,6 +22,7 @@ const ItemList: FC<ItemListProps> = ({items, tailRef, isLoading, wrapperStyles, 
             </div>
             <div ref={tailRef} className={styles.lastElem}></div>
             {isLoading && <Loader imageProps={{style: {height: 48, width: 'auto'}}}/>}
+            {isError && <p data-testid="error-msg">list fetch error</p>}
         </div>        
     );
 }

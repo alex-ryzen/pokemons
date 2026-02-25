@@ -197,24 +197,42 @@ export const Tabs: FC<TabsProps> = ({ tabs, activeTab, changeTab }) => {
         <div className={styles.tabsWrapper}>
             <div className={styles.tabsContainer}>
                 <nav className={styles.tabsNavbar}>
-                    {tabs.map((tab, i) => (
-                        <button
-                            key={tab.key}
-                            ref={(el) => { tabsRefs.current[i] = el; }}
-                            className={`${styles.tabBtn} ${
-                                tab.key === activeTab ? styles.tabBtnActive : ""
-                            }`}
-                            onClick={() => changeTab(tab.key)}
-                        >
-                            {tab.label}
-                        </button>
-                    ))}
+                    {tabs.map((tab, i) => {
+                        const isActive = tab.key === activeTab;
+                        return(
+                            <button
+                                key={tab.key}
+                                ref={(el) => { tabsRefs.current[i] = el; }}
+                                id={`tab-${tab.key}`}
+                                name={`tab-${tab.key}`}
+                                aria-label={`tab-${tab.key}`}
+                                aria-controls={`tabpanel-${tab.key}`}
+                                data-testid={`tab-${tab.key}`}
+                                role="tab"
+                                aria-selected={isActive}
+                                className={`${styles.tabBtn} ${
+                                    isActive ? styles.tabBtnActive : ""
+                                }`}
+                                
+                                onClick={() => changeTab(tab.key)}
+                            >
+                                {tab.label}
+                            </button>
+                        )}
+                    )}
                     <div ref={indicatorRef} className={styles.tabIndicator} />
                 </nav>
                 <div className={styles.swipeViewport} ref={containerRef}>
                     <div className={styles.swipeTrack} ref={trackRef}>
                         {tabs.map((tab) => (
-                            <div key={tab.key} className={styles.tabPanelItem}>
+                            <div
+                                id={`tabpanel-${tab.key}`}
+                                aria-label={`tabpanel-${tab.key}`}
+                                data-testid={`tabpanel-${tab.key}`}
+                                role="tabpanel" 
+                                key={tab.key} 
+                                className={styles.tabPanel}
+                            >
                                 {tab.content}
                             </div>
                         ))}

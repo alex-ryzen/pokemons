@@ -1,9 +1,7 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useRef, useState } from 'react';
 import BlockTitle from '../UI/BlockTitle/BlockTitle';
 import { ItemCardProps } from '../UI/ItemCard/ItemCard';
 import styles from './shop.module.css'
-import { useAppDispatch } from '../../hooks';
-import { fetchShopItems } from '../../services/api-actions';
 import { FilterArgs } from '../../hooks/useFilter';
 import Sort from '../UI/Sort/Sort';
 import FilterBar from '../UI/Filter/FilterBar';
@@ -12,7 +10,8 @@ import Button from '../UI/Button/Button';
 import { useObserver } from '../../hooks/useObserver';
 import ItemList from '../UI/ItemList/ItemList';
 import { returnByKey } from '../../utils/functions';
-import { getShop } from '../../store/item-process/shopSlice';
+import { useGetShopItemsInfiniteQuery } from '../../services/shop-service';
+import { LIMIT } from '../../consts';
 
 const shopFilter: FilterArgs['content'] = {
     product: {
@@ -46,11 +45,11 @@ const shopSortOptions: Array<ListedData> = [
 ]
 
 /**
- * this is Shop Template Generator
+ * Shop Template Generator
  */
 const STG = {
     title: (name: string, level: number) => `${name} ${level} уровня`,
-    buyButton: (price: number) => `Купить за ${price}`,
+    buyButton: (price: string) => `Купить за ${price}`,
     description: {
         pokeball: (item: IShopItem) => `Во время охоты ловит покемона с шансом ${item.specs?.chance || "?"}%`,
         berry: (item: IShopItem) => `Накорми ей покемона для увеличения веса на ${item.specs?.power ? item.specs.power / 100 : "?"} кг`,
@@ -66,53 +65,34 @@ export interface ShopQueryParams {
 }
 
 const Shop = memo(() => {
-    const dispatch = useAppDispatch()
-    const shop = getShop()
-    
     const [applied, setApplied] = useState<boolean>(true);
     const [filter, setFilter] = useState<string>("");
     const [sort, setSort] = useState<string>(shopSortOptions[0].name);
-    
-    const limit = 100;
-    const [page, setPage] = useState<number>(0)
-    
+    const { 
+        data: shop, 
+        isLoading, 
+        isError,
+        isFetching, 
+        fetchNextPage, 
+        hasNextPage 
+    } = useGetShopItemsInfiniteQuery({
+        filter,
+        sort,
+        limit: LIMIT
+    });
     const blockRef = useRef<HTMLDivElement>(null);
     const tailRef = useRef<HTMLDivElement>(null);
     
     useObserver({
         tailRef: tailRef,
-        canLoad: shop.count < shop.total, 
-        isLoading: shop.isLoading,
-        callback: () => {
-            setPage((p) => p + 1)
-        }
+        canLoad: hasNextPage && !isFetching, 
+        isLoading: isFetching,
+        callback: fetchNextPage
     })
 
-    const fetchSI = () => {
-        const qdata: ShopQueryParams = {
-            limit: limit,
-            offset: page * limit,
-            filter: filter,
-            sort: sort,
-            search: undefined,
-        }
-        if (!shop.isLoading) {
-            dispatch(fetchShopItems(qdata));
-        }
-    }
-
-    useEffect(() => {
-        fetchSI();
-    }, [page])
-
     const handleApplyClick = useCallback(() => {
-        if (page !== 0) { 
-            setPage(0);
-        } else {
-            fetchSI();
-            setApplied(true);
-        } 
-    }, [limit, page, filter, sort])
+        setApplied(true);
+    }, [])
 
     return ( 
         <div className={styles.shopWrapper}>
@@ -134,7 +114,7 @@ const Shop = memo(() => {
                 <div ref={blockRef} className={styles.itemsBlock}>
                     <ItemList
                         items={
-                            shop.shopItems.map((item) => {
+                            shop?.pages.flatMap(page => page.items).map((item) => {
                                 const shopListItem: ItemCardProps = {
                                     title: STG.title(item.name, item.level || 0),
                                     description: returnByKey<typeof STG.description>(item.item_type, STG.description)(item),
@@ -142,53 +122,22 @@ const Shop = memo(() => {
                                     img: item.image
                                 }
                                 return shopListItem
-                            })
+                            }) || []
                         }
                         tailRef={tailRef}
-                        isLoading={shop.isLoading}
+                        isLoading={isLoading || isFetching}
+                        isError={isError}
                         wrapperStyles={{maxHeight: (blockRef.current?.clientHeight || 0)}} // - 2 * GENERAL_PADDING
                     ></ItemList>
                 </div>
-                {!applied && (<Button onClick={handleApplyClick} className={styles.applyButton}>
-                    Применить
-                </Button>)}
+                {!applied && ( // todo: sync with RTKQ
+                    <Button onClick={handleApplyClick} className={styles.applyButton}>
+                        Применить
+                    </Button>
+                )}
             </div>
         </div> 
     );
 });
  
 export default Shop;
-
-
-// /**
-//  * this is Shop Template Generator
-//  */
-// const STG = {
-//     title: (name: string, level: number) => `${name} ${level} уровня`,
-//     buyButton: (price: number) => `Купить за ${price}`,
-//     description: {
-//         pokeball: (chance: number) => `Во время охоты ловит покемона с шансом ${chance}%`,
-//         berry: (power: number, maxco: number) => `Накорми ей покемона для увеличения веса на ${power / 10} кг в макс. кол-ве ${maxco}`,
-//     }
-// }
-
-// const initShopItems: ItemCardProps[] =  [
-//     {
-//         title: "Ягода 1 уровня",
-//         description: "Накорми ей покемона для увеличения веса на 0.1 кг",
-//         buttonTxt: "Купить за 1000",
-//         img: "/images/items/d3c0698fdebee1e1c412fdd15288a696c106dd6e.png", 
-//     },
-//     {
-//         title: "Покеболл 1 уровня",
-//         description: "Во время охоты ловит покемона с шансом 7%",
-//         buttonTxt: "Купить за 1000",
-//         img: "/images/items/1c8e6d145c9ef9b8ec6a860ea8bf65c115fb1539.png",
-//     },
-//     {
-//         title: "Покеболл 2 уровня",
-//         description: "Во время охоты ловит покемона с шансом 15%",
-//         buttonTxt: "Купить за 1000",
-//         img: "/images/items/2f7faec4d1353f1810511eb434ea4b2981205bf6.png",
-//     }
-// ]

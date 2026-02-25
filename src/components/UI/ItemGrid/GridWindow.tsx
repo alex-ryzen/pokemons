@@ -7,13 +7,8 @@ import React, {
     memo,
     CSSProperties,
 } from "react";
-import { ScrollOffset } from "../../../types/app";
+import { GridWindowHandle, ScrollOffset } from "../../../types/app";
 import styles from "./itemGrid.module.css"
-
-export type GridWindowHandle = {
-    getScroll: () => ScrollOffset;
-    container: HTMLDivElement | null;
-};
 
 interface GridWindowProps {
     gridWidth: number;
@@ -27,6 +22,7 @@ interface GridWindowProps {
     children: (args: {
         cells: Array<{ x: number; y: number }>;
     }) => React.ReactNode;
+    testid: string;
 }
 
 const GridWindow = forwardRef<GridWindowHandle, GridWindowProps>(
@@ -41,6 +37,7 @@ const GridWindow = forwardRef<GridWindowHandle, GridWindowProps>(
             className,
             containerStyles,
             children,
+            testid
         },
         ref
     ) => {
@@ -86,7 +83,7 @@ const GridWindow = forwardRef<GridWindowHandle, GridWindowProps>(
             const friction = 0.96;
             const stopThreshold = 0.1;
 
-            const step = (time: number) => {
+            const step = (_time: number) => {
                 if (!containerRef.current) return;
 
                 let { x, y } = velocity.current;
@@ -212,6 +209,7 @@ const GridWindow = forwardRef<GridWindowHandle, GridWindowProps>(
         return (
             <div
                 ref={containerRef}
+                data-testid={testid}
                 onMouseDown={onMouseDown}
                 className={`${styles.gridWindowScrollableWrapper} ${
                     isPanning ? styles.grabbingCursor : styles.grabCursor

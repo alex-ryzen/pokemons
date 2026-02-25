@@ -1,16 +1,21 @@
 // general 
 
 export const Namespace = {
-    auth: 'auth',
-    user: 'user',
-    shop: 'shop',
-    garden: 'garden',
-    inventory: 'inventory',
-    pokemon: 'pokemon'
+    Auth: 'auth',
+    User: 'user',
+    Shop: 'shop',
+    Garden: 'garden',
+    Inventory: 'inventory',
+    Pokemon: 'pokemon'
 } as const;
 
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_API_URL;
-export const STATIC_URL = import.meta.env.VITE_STATIC_URL;
+export const GRIDNAMES = {
+    inventory: 'inv',
+    garden: 'grdn'
+} as const;
+
+export const BACKEND_URL = import.meta.env.VITE_BACKEND_API_URL as string;
+export const STATIC_URL = import.meta.env.VITE_STATIC_URL as string;
 
 // layout
 export const HEADER_HEIGHT = 86;
@@ -36,3 +41,8 @@ export const SCROLL_SPEED = 15;
 
 // export const VIEWPORT_W = GRID_CELL_W * (CELL_SIZE + GRID_GAP) + SCROLLBAR_WIDTH - GENERAL_PADDING / 2; //320 - GENERAL_PADDING
 // export const VIEWPORT_H = 500;
+
+export const DEBOUNCE_INTERVAL = 3000;
+
+// data
+export const LIMIT = 100;

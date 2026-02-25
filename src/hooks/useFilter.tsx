@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, createContext, FC, ReactNode, Provider } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ListedData, RangeData } from "../types/app";
 
-// ----- helpers -----
+// helpers
 export type FilterContentValueType<T_default, T_active> = {
     default: T_default;
     active?: T_active;
@@ -36,7 +36,7 @@ export function isOfFilterType<T extends FilterContent["type"]>(
 ): obj is Extract<FilterContent, { type: T }> {
     return obj.type === type;
 }
-// ----- ------- -----
+// -----
 
 export interface FilterOutType {
     filterStr: string;
@@ -112,13 +112,3 @@ export function useFilter( { content, initialString }: FilterArgs ): FilterOutTy
     };
     return outputValue;
 }
-
-
-// import { useContext } from "react"
-// import { FilterContext } from "../contexts/FilterContext"
-
-// export const useFilter = () => {
-//     const context = useContext(FilterContext)
-//     if (!context) throw new Error("useFilter must be used within a FilterProvider");
-//     return context;
-// }

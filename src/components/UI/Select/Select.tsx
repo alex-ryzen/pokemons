@@ -1,4 +1,4 @@
-import { FC, memo, MouseEvent, PointerEvent, TouchEvent, useCallback, useRef, useState } from "react";
+import { FC, memo, MouseEvent, TouchEvent, useCallback, useRef, useState } from "react";
 import styles from './select.module.css'
 import { useOutsideClick } from "../../../hooks/useClickOutside";
 import { ListedData } from "../../../types/app";
@@ -29,7 +29,7 @@ const Select: FC<SelectProps> = memo(({ name, options, onSelect, disabled }) => 
         toggleOpen();
     }, [options])
     return (
-        <div ref={rootRef} className={styles.selectWrapper}>
+        <div role="combobox" ref={rootRef} className={styles.selectWrapper}>
             <select name={name} className={styles.select} onClick={(e) => {e.preventDefault()}} aria-label={`${name} custom select`}></select>
             <div 
                 className={styles.selectBar} 

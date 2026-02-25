@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import CheckboxList from "../Checkbox/CheckboxList";
 import Range from "../Input/Range";
 import styles from './filter.module.css'

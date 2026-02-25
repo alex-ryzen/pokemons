@@ -1,5 +1,5 @@
 
-import { FC, ForwardedRef, forwardRef, HTMLInputTypeAttribute, useEffect, useId } from 'react';
+import { FC, ForwardedRef, forwardRef, HTMLInputTypeAttribute, useId } from 'react';
 import styles from './input.module.css'
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {

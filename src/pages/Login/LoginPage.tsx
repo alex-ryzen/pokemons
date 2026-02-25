@@ -1,3 +1,4 @@
+
 import LoginForm from "../../components/AuthFroms/LoginForm";
 import RegForm from "../../components/AuthFroms/RegForm";
 import Logo from "../../components/UI/LogoContainer/Logo";
@@ -20,6 +21,7 @@ const initLoginTabs: TabConfig[] = [
 ]
 
 const LoginPage = () => {
+    // todo: add current tab in query string using useSearchParams (like "currentTab=log or currentTab=reg")
     const tabProps = useTabs(initLoginTabs, "log")
     return ( 
         <div className={styles.authFormContainer} style={{width: 400}}> 

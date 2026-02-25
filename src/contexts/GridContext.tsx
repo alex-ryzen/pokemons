@@ -1,12 +1,10 @@
-import React, {
+import {
     createContext,
-    useContext,
     useRef,
     useState,
     useCallback,
     FC,
     ReactNode,
-    useEffect,
     useMemo,
 } from "react";
 import {
@@ -17,47 +15,48 @@ import {
 } from "@dnd-kit/core";
 
 import { ItemGridFuncs as IGF } from "../utils/handlers";
-import { GridWindowHandle } from "../components/UI/ItemGrid/GridWindow";
-import { DropArea, IGridItem } from "../types/app";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { CELL_SIZE, GRID_GAP, SCROLL_MARGIN, SCROLL_SPEED } from "../consts";
-import { setPosition } from "../store/item-process/inventorySlice";
-import { GridSpecs } from "../components/UI/ItemGrid/GridArea";
-
-interface GridActionsType {
-    registerGrid: (id: UniqueIdentifier) => (grid: GridSpecs | null) => void;
-    handleDragStart: (e: DragStartEvent) => void;
-    handleDragMove: (e: DragMoveEvent) => void;
-    handleDragEnd: (e: DragEndEvent) => void;
-    handleDragCancel: () => void;
-}
-
-interface GridStateType {
-    activeItem: IGridItem | null;
-    dropArea: DropArea | null;
-}
+import { DropArea, GridActionsType, GridSpecs, GridStateType, GridWindowHandle, IDTYPE, IGridItem } from "../types/app";
+import { useAppDispatch } from "../hooks";
+import { CELL_SIZE, DEBOUNCE_INTERVAL, GRID_GAP, GRIDNAMES, SCROLL_MARGIN, SCROLL_SPEED } from "../consts";
+import { inventoryApi, useUpdatePositionsMutation } from "../services/inventory-service";
+import { RootState, store } from "../store/store";
+import { gardenApi } from "../services/garden-service";
 
 export const GridActionsCTX = createContext<GridActionsType | null>(null);
 export const GridStateCTX = createContext<GridStateType | null>(null)
 
+export const selectorRegistry = {
+    [GRIDNAMES.inventory]: inventoryApi.endpoints.getInventoryItems.select(),
+    [GRIDNAMES.garden]: gardenApi.endpoints.getGradenBerries.select(),
+} as const;
+
+export type GridSource = keyof typeof selectorRegistry;
+
+export const selectAllDicts = (state: RootState) => [
+    inventoryApi.endpoints.getInventoryItems.select()(state).data?.entities,
+    gardenApi.endpoints.getGradenBerries.select()(state).data?.entities,
+    // + extra grids
+];
+
+export const selectItemFromAnyDict = (state: RootState, id: IDTYPE): IGridItem | undefined => {
+    const dictionaries = selectAllDicts(state);
+    for (const dict of dictionaries) { // go through the grid dicts (inv and grdn)
+        if (dict && dict[id]) return dict[id];
+    }
+    return undefined;
+};
+
 export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const dispatch = useAppDispatch();
-    const items = [
-        ...useAppSelector((s) => s.inventory.items),
-        ...useAppSelector((s) => s.garden.items),
-    ];
+    const [ updatePositions ] = useUpdatePositionsMutation();
 
     const activeItem = useRef<IGridItem | null>(null)
-    // const [dragState, setDragState] = useState<GridStateType>({ activeItem: null, dropArea: null });
-    const [dropArea, setDropArea] = useState<DropArea | null>(null);
-
-    const gridRefs = useRef<Record<UniqueIdentifier, GridSpecs | null>>(
-        {}
-    );
-    //useEffect(() => console.log("GRID REFS ", gridRefs), [items])
-
+    const [ dropArea, setDropArea ] = useState<DropArea | null>(null);
+    
+    const gridRefs = useRef<Record<UniqueIdentifier, GridSpecs | null>>({});
     const autoScrollTimer = useRef<number | null>(null);
-
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    
     const registerGrid = useCallback(
         (id: UniqueIdentifier) => (grid: GridSpecs | null) => {
             gridRefs.current[id] = grid;
@@ -95,13 +94,10 @@ export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     const handleDragStart = useCallback(
         (e: DragStartEvent) => {
-            const found = items.find((i) => i.id === e.active.id);
+            const state = store.getState();
+            const itemId = e.active.id;
+            const found = selectItemFromAnyDict(state, itemId)
             if (found) {
-                // setActiveItem({
-                //     ...found,
-                //     cTargetX: found.cPosX,
-                //     cTargetY: found.cPosY,
-                // });
                 activeItem.current = {
                     ...found,
                     cTargetX: found.cPosX,
@@ -110,7 +106,7 @@ export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
                 setDropArea(IGF.getDropArea(activeItem.current));
             }
         },
-        [items]
+        [store]
     );
 
     const handleDragMove = useCallback(
@@ -126,7 +122,6 @@ export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
             const gridId = over.id;
             const handle = gridRefs.current[gridId]?.handle;
-            //console.log("DRAG MOVE", gridRefs)
             const container = handle?.container;
 
             if (!container || !handle) return;
@@ -172,7 +167,6 @@ export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
                     cTargetX: cx,
                     cTargetY: cy,
                 };
-                //setActiveItem(newItemState);
                 activeItem.current = newItemState
                 setDropArea(IGF.getDropArea(activeItem.current));
             }
@@ -184,38 +178,38 @@ export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
         (e: DragEndEvent) => {
             stopAutoScroll();
             const { active } = e;
-
+            const state = store.getState();
             const finalItem = activeItem.current;
-
-            //setActiveItem(null);
             activeItem.current = null;
             setDropArea(null);
-
             if (finalItem) {
                 const targetGridId = finalItem.gridId;
-                const targetItems = items.filter(
-                    (i) => i.gridId === targetGridId && i.id !== active.id
-                );
-                const grid_cell_w = gridRefs.current[targetGridId]?.grid.grid_cell_w || 0
-                const grid_cell_h = gridRefs.current[targetGridId]?.grid.grid_cell_h || 0
-                const actual_size = gridRefs.current[targetGridId]?.grid.actualSize || 0
+                const targetItemsDict = selectorRegistry[targetGridId as GridSource](state).data?.entities 
+                const targetItems = Object.values(targetItemsDict || {})
+                const targetGrid = gridRefs.current[targetGridId];
+                const grid_cell_w = targetGrid?.grid.grid_cell_w || 0
+                const grid_cell_h = targetGrid?.grid.grid_cell_h || 0
+                const actual_size = targetGrid?.grid.actualSize || 0
                 const max_h_size = Math.round(actual_size / grid_cell_w)
                 
-                if (IGF.canPlace(targetItems, finalItem, grid_cell_w, grid_cell_h, max_h_size)) {
-                    dispatch(
-                        setPosition({
+                if (targetGrid && !(finalItem.gridId == GRIDNAMES.garden && targetGrid.grid.id == GRIDNAMES.garden)) { // cant move in the garden
+                    if (IGF.canPlace(targetItems, finalItem, grid_cell_w, grid_cell_h, max_h_size)) { // todo: make a bitset mask
+                        targetGrid.updPosStack.set(active.id, {
                             id: active.id,
-                            pos: {
-                                gridId: targetGridId,
-                                cPosX: finalItem.cTargetX!,
-                                cPosY: finalItem.cTargetY!,
-                            },
+                            gridId: targetGridId,
+                            cPosX: finalItem.cTargetX!,
+                            cPosY: finalItem.cTargetY!,
                         })
-                    );
+                    }
+                    timerRef.current = setTimeout(() => {
+                        const batch = Array.from(targetGrid.updPosStack).map(([_id, position]) => (position));
+                        updatePositions(batch);
+                        targetGrid.updPosStack.clear();
+                    }, DEBOUNCE_INTERVAL);
                 }
             }
         },
-        [activeItem, items, dispatch]
+        [store, activeItem, dispatch]
     );
 
     const handleDragCancel = useCallback(() => {
@@ -239,6 +233,7 @@ export const GridProvider: FC<{ children: ReactNode }> = ({ children }) => {
         activeItem: activeItem.current,
         dropArea
     }), [activeItem, dropArea]);
+    
     return (
         <GridActionsCTX.Provider value={actions}>
             <GridStateCTX.Provider value={state}>

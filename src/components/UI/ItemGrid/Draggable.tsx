@@ -1,14 +1,11 @@
 import { UniqueIdentifier, useDraggable } from "@dnd-kit/core";
 import {
     CSSProperties,
-    FC,
     ReactNode,
     useEffect,
-    useMemo,
-    useRef,
 } from "react";
 import { CSS } from "@dnd-kit/utilities";
-import styles from "./itemGrid.module.css"
+// import styles from "./itemGrid.module.css"
 
 export type DraggableData = {
     //area: UniqueIdentifier | string;

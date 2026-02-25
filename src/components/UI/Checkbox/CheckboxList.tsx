@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useCallback, useState } from "react";
+import { ChangeEvent, FC, useCallback } from "react";
 import styles from "./checkbox.module.css"
 import Checkbox from "./Checkbox";
 import { ListedData } from "../../../types/app";

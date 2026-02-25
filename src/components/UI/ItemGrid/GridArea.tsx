@@ -1,6 +1,6 @@
-import React, { RefObject, useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { useDroppable } from "@dnd-kit/core";
-import GridWindow, { GridWindowHandle } from "./GridWindow";
+import GridWindow from "./GridWindow";
 import { Draggable } from "./Draggable";
 import { GridItem } from "./GridItem";
 import { GridCell } from "./GridCell";
@@ -11,31 +11,12 @@ import {
     GRID_GAP,
 } from "../../../consts";
 import { shallowEqual } from "react-redux";
-import { DropArea, IGridItem } from "../../../types/app";
+import { GridAreaType, GridWindowHandle } from "../../../types/app";
 import Button from "../Button/Button";
 import Balance from "../Balance/Balance";
+import { GridSource, selectorRegistry } from "../../../contexts/GridContext";
 
-interface GridAreaProps {
-    id: string;
-    data: any;
-    actualSize: number;
-    activeItem: IGridItem | null;
-    dropArea: DropArea | null;
-    grid_cell_w: number;
-    // grid_cell_w_aclual: number;
-    grid_cell_h: number;
-    // grid_cell_h_aclual: number;
-    grid_cell_view_w: number;
-    grid_cell_view_h: number;
-    wrapperRef?: RefObject<HTMLDivElement | null>;
-    extentionPrice?: number | string;
-    registerGridRef: (node: GridSpecs | null) => void;
-}
-
-export interface GridSpecs {
-    grid: Omit<GridAreaProps, "activeItem" | "dropArea" | "wrapperRef" | "registerGridRef">,
-    handle: GridWindowHandle | null,
-}
+type GridAreaProps = GridAreaType
 
 export const GridArea: React.FC<GridAreaProps> = ({
     id,
@@ -49,7 +30,7 @@ export const GridArea: React.FC<GridAreaProps> = ({
     // grid_cell_h_aclual,
     grid_cell_view_w,
     grid_cell_view_h,
-    wrapperRef,
+    //wrapperRef,
     extentionPrice,
     registerGridRef,
 }) => {
@@ -57,14 +38,8 @@ export const GridArea: React.FC<GridAreaProps> = ({
         id,
         data: { type: "grid", accepts: data?.accepts },
     });
-
-    const items = useAppSelector(
-        (state) => state.inventory.items.filter((i) => i.gridId === id),
-        shallowEqual
-    );
-
+    const items = useAppSelector(state => selectorRegistry[id as GridSource](state).data?.entities || [], shallowEqual);
     const windowRef = useRef<GridWindowHandle | null>(null);
-
     const setRefs = (node: GridWindowHandle | null) => {
         windowRef.current = node;
         registerGridRef({
@@ -80,6 +55,7 @@ export const GridArea: React.FC<GridAreaProps> = ({
                 grid_cell_view_h,
                 extentionPrice,
             }, 
+            updPosStack: new Map(),
             handle: node
         });
         if (node?.container) {
@@ -96,6 +72,7 @@ export const GridArea: React.FC<GridAreaProps> = ({
     return (
         <GridWindow
             ref={setRefs}
+            testid={`grid-area-${id}`}
             gridWidth={grid_cell_w}
             gridHeight={grid_cell_h}
             cellSize={CELL_SIZE}
@@ -110,7 +87,7 @@ export const GridArea: React.FC<GridAreaProps> = ({
                         const isTargetGrid = activeItem?.gridId === id;
                         const isCovered = isTargetGrid && isOver && IGF.isCovered(dropArea, x, y);
                         const max_available_c_h = Math.round(actualSize / grid_cell_w);
-                        const isValid = IGF.isDroppable(items, activeItem, dropArea, x, y, grid_cell_w, grid_cell_h, max_available_c_h);
+                        const isValid = IGF.isDroppable(Object.values(items), activeItem, dropArea, x, y, grid_cell_w, grid_cell_h, max_available_c_h);
                         const isAvailable = (y < max_available_c_h);
                         return (
                             <GridCell
@@ -124,10 +101,11 @@ export const GridArea: React.FC<GridAreaProps> = ({
                             />
                         );
                     })}
-                    {items.map((item) => (
+                    {Object.entries(items).map(([_key, item]) => (
                         <Draggable
                             key={item.id}
                             id={item.id}
+                            data-testid={item.itemId}
                             data={{ gridId: id, itemId: item.id }}
                             draggableStyles={{
                                 position: "absolute",

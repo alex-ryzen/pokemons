@@ -1,4 +1,12 @@
 import { STATIC_URL } from "../consts";
+import { GeneralType, IDTYPE} from "../types/app";
+
+export function mapping<T extends GeneralType>(array: T[]): Record<IDTYPE, T> {
+    return array.reduce<Record<string, T>>((acc, elem) => {
+        acc[elem.id] = elem;
+        return acc;
+    }, {});
+}
 
 export function getRandomInt(min: number, max: number): number {
     min = Math.ceil(min);

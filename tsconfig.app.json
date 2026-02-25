@@ -21,7 +21,12 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Testing */
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "types": ["jest", "@testing-library/jest-dom", "cypress", "@testing-library/cypress", "node"]
   },
-  "include": ["src"]
+  "include": ["src", "cypress/**/*.ts", "cypress.config.ts"]
 }

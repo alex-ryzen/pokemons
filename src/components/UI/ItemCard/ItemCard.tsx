@@ -1,4 +1,4 @@
-import { createRef, useEffect, useRef } from "react";
+import { createRef, useEffect } from "react";
 import Button from "../Button/Button";
 import styles from './itemCard.module.css'
 import { resolveImageUrl } from "../../../utils/functions";

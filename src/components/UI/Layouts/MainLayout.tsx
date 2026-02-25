@@ -1,7 +1,7 @@
 import styles from "./mainLayout.module.css";
 import { Outlet } from "react-router";
 import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+// import Footer from "../Footer/Footer";
 import CTXProviderComposer from "../../../contexts/CTXProviderComposer";
 import { GridProvider } from "../../../contexts/GridContext";
 

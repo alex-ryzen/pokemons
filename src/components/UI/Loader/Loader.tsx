@@ -9,7 +9,7 @@ type LoaderProps = {
 
 const Loader: FC<LoaderProps> = ({containerProps, imageProps}) => {
     return (
-        <div {...containerProps} className={styles.lodaerContainer}>
+        <div {...containerProps} className={styles.lodaerContainer} data-testid="loading">
             <img
                 {...imageProps}
                 className={styles.loaderImg} 

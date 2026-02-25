@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, ReactNode } from "react";
+import { FC, HTMLAttributes } from "react";
 import styles from "./gridItem.module.css"
 
 export interface IGridItemProps extends HTMLAttributes<HTMLDivElement> {

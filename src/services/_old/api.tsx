@@ -99,7 +99,7 @@ export const createAPI = (): AxiosInstance => {
                 isRefreshing = true;
                 try {
                     const response = await api.patch<AuthResponse>(
-                        `${BACKEND_URL}/auth/refresh-token`
+                        `${BACKEND_URL}/auth/refreshToken`
                     );
                     const newToken = response.data.accessToken;
                     localStorage.setItem("accessToken", newToken);

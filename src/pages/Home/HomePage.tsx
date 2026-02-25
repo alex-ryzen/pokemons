@@ -1,59 +1,14 @@
-import React, { JSX, memo, useEffect, useRef, useState, type FC } from "react";
+import React, { JSX, memo, useRef, useState, type FC } from "react";
 import styles from './homepage.module.css'
 import Accordion from "../../components/UI/Accordion/Accordion";
 import MyPokemons from "../../components/MyPokemons/MyPokemons";
 import Garden from "../../components/Garden/Garden";
-import { useAppDispatch } from "../../hooks";
+//import { useAppDispatch } from "../../hooks";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { useGridActions } from "../../hooks/useGrid";
-import { setInventoryItems } from "../../store/item-process/inventorySlice";
 import { DragOverlayWrapper } from "../../components/UI/ItemGrid/DragOverlayWrapper";
 import Inventory from "../../components/Inventory/Inventory";
 import Shop from "../../components/Shop/Shop";
-import { IItem } from "../../types/app";
-
-const initItems: IItem[] = [
-    {
-        id: "item1",
-        itemId: "item1",
-        gridId: "inv",
-        category: "berry",
-        cSize: 2,
-        cPosX: 3,
-        cPosY: 1,
-        image: "/images/items/d3c0698fdebee1e1c412fdd15288a696c106dd6e.png",
-    },
-    {
-        id: "item2",
-        itemId: "item2",
-        gridId: "inv",
-        category: "pokeball",
-        cSize: 1,
-        cPosX: 0,
-        cPosY: 0,
-        image: "/images/items/2f7faec4d1353f1810511eb434ea4b2981205bf6.png",
-    },
-    {
-        id: "item3",
-        itemId: "item3",
-        gridId: "inv",
-        category: "pokeball",
-        cSize: 1,
-        cPosX: 2,
-        cPosY: 1,
-        image: "/images/items/1c8e6d145c9ef9b8ec6a860ea8bf65c115fb1539.png",
-    },
-    {
-        id: "item4",
-        itemId: "item4",
-        gridId: "grdn",
-        category: "pokeball",
-        cSize: 1,
-        cPosX: 3,
-        cPosY: 4,
-        image: "/images/items/d3c0698fdebee1e1c412fdd15288a696c106dd6e.png",
-    },
-];
 
 type MidItem = {
     key: string,
@@ -87,7 +42,7 @@ const MID_ITEMS: MidItem[] = [
 const HomePage = memo(() => {
     const [openIdx, setOpenIdx] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const dispatch = useAppDispatch();
+    //const dispatch = useAppDispatch();
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: { distance: 5 },
@@ -99,10 +54,6 @@ const HomePage = memo(() => {
         handleDragEnd,
         handleDragCancel,
     } = useGridActions();
-
-    useEffect(() => {
-        dispatch(setInventoryItems(initItems));
-    }, []);
 
     return (
         <DndContext

@@ -7,17 +7,19 @@ import { useEffect } from "react";
 import { useAppSelector } from "../../../hooks";
 import { RouteNames } from "../../../router/routes";
 import MoneyTitle from "../Balance/Balance";
+import { useGetUserDataQuery } from "../../../services/user-service";
 
 interface HeaderProps { }
 
 const Header = (headerProps: HeaderProps) => {
-    const { user, player, isAuth } = useAppSelector(state => state.user)
+    const { isAuth } = useAppSelector(state => state.auth);
+    const { data } = useGetUserDataQuery(undefined);
     return (
         <header className={`${styles["header"]} content-block`} id="header">
             <div className={styles["header-container"]}>
                 <Logo />
                 <div className={styles["user-container"]}>
-                    {isAuth && <h3 className={styles.userProfileName}>{`Hello, ${user?.username}`}</h3>}
+                    {isAuth && <h3 className={styles.userProfileName}>{`Hello, ${data?.user?.username}`}</h3>}
                     <Link title="Login" className={styles["user-profile"]} to={isAuth ? RouteNames.PROFILE : RouteNames.AUTH}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

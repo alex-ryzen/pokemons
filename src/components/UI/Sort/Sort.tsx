@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent, MouseEvent, TouchEvent } from "react";
+import { FC } from "react";
 import styles from './sort.module.css'
 import Select from "../Select/Select";
 import { ListedData } from "../../../types/app";
